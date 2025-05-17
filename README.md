@@ -1,2 +1,2 @@
 # gxt-physiology
-Exploring respiratory physiology during graded exercise test. 
+Exploring respiratory physiology during graded exercise tests. 
