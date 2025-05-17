@@ -1,0 +1,96 @@
+/* Layout */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+}
+  
+.header {
+    text-align: center;
+    padding: 1.5rem 0;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a237e;
+}
+
+.subtitle {
+    margin: 0.5rem 0 0;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;
+}
+
+main {
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+#main-window {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#chart {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+#sub-window {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    margin: auto auto;
+    height: 100%;
+    align-items: stretch;
+
+}
+
+#sub-chart-1, #sub-chart-2, #sub-chart-3 {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+
+
+#main-tooltip {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 10;
+    font-size: 0.9rem;
+}
+
+.gridlines line {
+    stroke: #ccc;
+    stroke-opacity: 0.5;
+    shape-rendering: crispEdges; 
+}
+
+.gridlines path {
+    display: none;
+}
+
