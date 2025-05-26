@@ -94,3 +94,73 @@ main {
     display: none;
 }
 
+
+
+/* Huize's Viz Styles */
+/* Container & positioning */
+#demographic-viz-container {
+  font-family: sans-serif;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+/* Dropdown controls */
+#demo-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* SVG styling */
+svg {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Axes */
+.axis path,
+.axis line {
+  stroke: #ccc;
+}
+.axis text {
+  font-size: 12px;
+  fill: #333;
+}
+.axis-label {
+  font-size: 13px;
+  font-weight: bold;
+  fill: #333;
+}
+
+/* Lines */
+.line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+/* Legend */
+.legend text {
+  font-size: 12px;
+  fill: #333;
+}
+.legend rect {
+  stroke: #666;
+}
+
+.tooltip {
+  position: absolute;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid #999;
+  padding: 6px 8px;
+  pointer-events: none;
+  font-size: 12px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Huize's Viz Styles Ends*/
