@@ -1,6 +1,8 @@
 // js/hm.js
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
+const demographicVizPath = './data/plot/demographic_viz.csv';
+
 // ─── CONTAINER & DROPDOWN ────────────────────────────────────────────────────
 const container = d3.select('main')
   .append('div')
@@ -62,7 +64,7 @@ const tooltip = container.append('div')
   .style('display','none');
 
 // ─── LOAD & PROCESS ─────────────────────────────────────────────────────────
-d3.csv('data/plot/demographic_viz.csv').then(raw => {
+d3.csv(demographicVizPath).then(raw => {
   const data = raw.map(d => ({
     sex:           d.Sex,
     bmi_group:     d.bmi_group,

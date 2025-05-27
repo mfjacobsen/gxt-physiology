@@ -1,5 +1,7 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
+const cleanRunnerPath = "./data/animation/clean_runner_840.csv";
+
 // animation.js
 let interval;
 let step = 0;
@@ -146,7 +148,7 @@ document.getElementById("reset-btn").onclick = () => {
   messageBox.style.display = "none";
 };
 
-d3.csv("data/animation/clean_runner_840.csv").then(csvData => {
+d3.csv(cleanRunnerPath).then(csvData => {
   data = csvData;
   data.forEach(d => {
     d.time = +d.time;
