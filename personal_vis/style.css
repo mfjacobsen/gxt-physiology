@@ -36,9 +36,21 @@ main {
     flex: 0.3;
 }
 
+#personal-vis-content {
+    margin: 20px 0;
+    display: flex;
+}
+
+#runners-table {
+    flex: 3;
+}
+
+#runners-bar-plot {
+    flex: 5;
+}
+
 .d3-table {
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
 .d3-table th,
@@ -53,16 +65,4 @@ main {
     font-weight: bold;
 }
 
-#personal-vis-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
 
-#runners-table {
-    flex: 1;
-}
-
-#runners-bar-plot {
-    flex: 3;
-}

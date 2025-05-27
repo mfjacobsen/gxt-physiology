@@ -10,9 +10,11 @@ const heightInput = document.getElementById("height-input");
 const weightInput = document.getElementById("weight-input");
 const unitsSelect = document.getElementById("units-input");
 
-const numRunners = 10;
+const numRunners = 5;
 
 let xScaleRunners, yScaleRunners;
+
+const runnersTableMargin = { top: 40, right: 0, bottom: 40, left: 0 };
 
 
 // Loads and formats the runners demographic data
@@ -124,7 +126,7 @@ function computeDistance(row, input, stats, isMetric) {
   }
 
 // Renders the runners table based on the loaded data and input fields
-function renderRunnersTable(data, stats) {
+function renderRunnersTable(data, stats, testsData, initialRender = false) {
     const isMetric = unitsSelect.value === "metric";
     const sex = sexInput.value.trim().toLowerCase();
     const age = ageInput.value.trim();
@@ -157,17 +159,20 @@ function renderRunnersTable(data, stats) {
     const container = d3.select("#runners-table");
     container.html("");
 
+    container.style("margin-top", `${runnersTableMargin.top}px`)
+    container.style("margin-bottom", `${runnersTableMargin.bottom}px`);
+
     const columns = isMetric
         ? [
-            { key: "id_test", label: "Test #" },
-            { key: "sex", label: "Sex" },
+            { key: "id_test", label: "Test ID" },
+            { key: "sex", label: "Sex (M/F)" },
             { key: "age", label: "Age" },
             { key: "height_metric", label: "Height (cm)" },
             { key: "weight_metric", label: "Weight (kg)" }
         ]
         : [
-            { key: "id_test", label: "Test #" },
-            { key: "sex", label: "Sex" },
+            { key: "id_test", label: "Test ID" },
+            { key: "sex", label: "Sex (M/F)" },
             { key: "age", label: "Age" },
             { key: "height_imperial", label: "Height (in)" },
             { key: "weight_imperial", label: "Weight (lbs)" }
@@ -194,6 +199,12 @@ function renderRunnersTable(data, stats) {
         .enter()
         .append("td")
         .text(d => d);
+
+    if (initialRender) {
+        renderRunnersPlot();
+    }
+
+    updateRunnersPlot(filtered, testsData);
 }
 
 // Gets table height for plot layout
@@ -215,14 +226,14 @@ function renderRunnersPlot(container = "#runners-bar-plot") {
     const { bodyHeight, headerHeight } = getTableHeights();
 
     const margin = { 
-        top: headerHeight, 
-        right: 20, 
-        bottom: 0, 
-        left: 40 
+        top: headerHeight + runnersTableMargin.top + 1, 
+        right: 40, 
+        bottom: runnersTableMargin.bottom, 
+        left: 60, 
     };
 
     const height = bodyHeight + margin.top + margin.bottom;
-    const width = 600;
+    const width = document.querySelector(container).getBoundingClientRect().width;
 
     const usableArea = {
         width: width - margin.left - margin.right,
@@ -238,7 +249,6 @@ function renderRunnersPlot(container = "#runners-bar-plot") {
         .select(container)
         .append('svg')
         .attr("viewBox", `0 0 ${width} ${height}`)
-        .attr("preserveAspectRatio", "xMinYMin meet")
         .style("width", "100%")
         .style("height", `${height}px`);
 
@@ -251,30 +261,37 @@ function renderRunnersPlot(container = "#runners-bar-plot") {
     yScaleRunners = d3
         .scaleBand()
         .domain(d3.range(numRunners).map(String))
-        .range([usableArea.top, usableArea.bottom]);
+        .range([usableArea.top, usableArea.bottom])
+        .padding(0.3);
 
+    // Define axes
     const xAxis = d3
             .axisBottom(xScaleRunners)
             .tickFormat(formatTimeMMSS);
     const yAxis = d3.axisLeft(yScaleRunners);
 
-    // Draw gridlines
-    const gridlines = svg
-        .append('g')
-        .attr('class', 'gridlines')
-        .attr('transform', `translate(${usableArea.left}, 0)`)
-        .call(d3.axisLeft(yScaleRunners).tickFormat('').tickSize(-usableArea.width));
-
     // Draw axes
     svg
         .append('g')
         .attr('transform', `translate(0, ${usableArea.bottom})`)
+        .attr('class', 'x-axis')
         .call(xAxis);
     svg
         .append('g')
+        .attr('class', 'y-axis')
         .attr('transform', `translate(${usableArea.left}, 0)`)
         .call(yAxis);
 
+    // Add Title
+    svg.append("text")
+        .attr("x", width / 2)                  
+        .attr("y", margin.top / 2)              
+        .attr("text-anchor", "middle")         
+        .attr("font-size", "1.5em")             
+        .attr("font-weight", "bold")
+        .text("Time on Treadmill");
+
+    
     svg.append("g").attr("class", "bars");
 }
 
@@ -284,25 +301,48 @@ function updateRunnersPlot(filtered, testsData, container = "#runners-bar-plot")
     // Join: get max test time for each id_test in filtered
     const testMap = d3.group(testsData, d => d.id_test);
 
-    const dataWithTimes = filtered.map(d => {
+    const dataWithTimes = filtered.map((d, i) => {
         const tests = testMap.get(d.id_test) || [];
         const maxTime = d3.max(tests, t => t.time) || 0;
 
         return {
             id_test: d.id_test,
-            distance: d.distance ?? Infinity, // optional if you want to color/sort
+            index: String(i),              
+            distance: d.distance ?? Infinity,
             time: maxTime
         };
     });
 
-    svg.selectAll("rect")
+    const svg = d3.select(container).select("svg");
+
+    svg.select("g.bars")
+        .selectAll("rect")
         .data(dataWithTimes)
         .join("rect")
         .attr("x", xScaleRunners(0))
-        .attr("y", d => yScaleRunners(d.id_test))
-        .attr("width", d => xScaleRunners(d.time) - xScaleRunners(0))
+        .attr("y", d => yScaleRunners(d.index))
         .attr("height", yScaleRunners.bandwidth())
-        .attr("fill", "#4682b4");
+        .attr("width", 0)  // start width at 0
+        .attr("fill", "#4682b4")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(d => (xScaleRunners(d.time) - xScaleRunners(0)) * 2)
+        .attr("width", d => xScaleRunners(d.time) - xScaleRunners(0));
+
+        const labelMap = Object.fromEntries(filtered.map((d, i) => [String(i), d.id_test]));
+
+        svg.select("g.y-axis")
+            .call(d3.axisLeft(yScaleRunners).tickFormat(d => labelMap[d]));
+
+        // Make x-axis labels larger
+        svg.select("g.x-axis")
+            .selectAll(".tick text")
+            .style("font-size", "14px");
+
+        // Make y-axis labels larger
+        svg.select("g.y-axis")
+            .selectAll(".tick text")
+            .style("font-size", "14px");
 }
 
 // Add event listeners to input fields
@@ -310,7 +350,7 @@ function addInputEventListeners() {
     
     // Add event listeners for input fields
     // Sex
-    sexInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats));
+    sexInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats, runnersTests));
 
     // Age
     ageInput.addEventListener("blur", () => formatWithUnit(ageInput, "years"));
@@ -318,7 +358,7 @@ function addInputEventListeners() {
     ageInput.addEventListener("input", () => {
         ageInput.value = ageInput.value.replace(/\D/g, "");
     });
-    ageInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats));
+    ageInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats, runnersTests));
 
     // Height
     heightInput.addEventListener("blur", () => {
@@ -331,7 +371,7 @@ function addInputEventListeners() {
     heightInput.addEventListener("input", () => {
         heightInput.value = heightInput.value.replace(/\D/g, "");
     });
-    heightInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats));
+    heightInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats, runnersTests));
 
     // Weight
     weightInput.addEventListener("blur", () => {
@@ -344,7 +384,7 @@ function addInputEventListeners() {
     weightInput.addEventListener("input", () => {
         weightInput.value = weightInput.value.replace(/\D/g, "");
     });
-    weightInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats));
+    weightInput.addEventListener("change", () => renderRunnersTable(runnersData, runnersStats, runnersTests));
 
     // Change units from imperial to metric
     unitsSelect.addEventListener("change", () => {
@@ -369,11 +409,14 @@ function addInputEventListeners() {
 
 const runnersData = await loadRunnersData(runnersDataPath);
 const runnersStats = await loadRunnersStats(runnersStatsPath);
-//const runnersTests = await loadRunnersTests(runnersTestsPaths);
+const runnersTests = await loadRunnersTests(runnersTestsPaths);
 
 addInputEventListeners();
-renderRunnersTable(runnersData, runnersStats);
-renderRunnersPlot();
+renderRunnersTable(runnersData, runnersStats, runnersTests, true);
+
+
+
+
 
 
 
