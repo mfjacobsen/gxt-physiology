@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Runner Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class="visual">
+    <div class="runner-row">
+      <div class="runner-img-wrapper">
+        <img id="runner-static" src="static_runner.png" class="runner-img">
+        <img id="runner-animated" src="runner.gif" class="runner-img" style="display: none;">
+      </div>
+      <div class="runner-info info-box">
+        <h2>Runner Info</h2>
+        <p><strong>ID:</strong> <span id="runner-id">--</span></p>
+        <p><strong>Age:</strong> <span id="runner-age">--</span></p>
+        <p><strong>Sex:</strong> <span id="runner-sex">--</span></p>
+        <p><strong>Weight:</strong> <span id="runner-weight">--</span> kg</p>
+        <p><strong>Height:</strong> <span id="runner-height">--</span> cm</p>
+      </div>
+    </div>
+
+    <div class="bar-section">
+      <div class="timer-label"><strong>Time Elapsed:</strong> <span id="time-label">00:00</span></div>
+      <svg width="600" height="40">
+        <rect class="bar-bg" x="0" y="5" width="600" height="30" rx="5" ry="5"></rect>
+        <rect class="bar-fill" x="0" y="5" width="0" height="30" rx="5" ry="5"></rect>
+      </svg>
+    </div>
+
+    <div class="controls">
+      <button id="play-btn">▶ Play</button>
+      <button id="pause-btn">⏸ Pause</button>
+      <button id="reset-btn">⟳ Reset</button>
+    </div>
+  </div>
+
+  <div class="sidebar info-box">
+    <h2>Live Stats</h2>
+    <p><strong>Heart Rate:</strong> <span id="hr">--</span> bpm</p>
+    <p><strong>O₂ Rate:</strong> <span id="o2">--</span> ml/min</p>
+    <p><strong>CO₂ Rate:</strong> <span id="co2">--</span> ml/min</p>
+    <p><strong>Breathing Rate:</strong> <span id="rr">--</span> breaths/min</p>
+    <p><strong>Ventilation (VE):</strong> <span id="ve">--</span> L/min</p>
+    <p><strong>Distance:</strong> <span id="dist">--</span> km</p>
+  </div>
+</div>
+
+<div id="threshold-message" class="threshold-box" style="display: none;"></div>
+
+<script src="animation.js"></script>
+</body>
+</html>
