@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="global.js" type="module" defer></script>
+</head>
+<body>
+<main>
+    <div id="personal-vis">
+        <h1 id="personal-vis-title"> Explore Runners Similar to You</h1>
+        <div id="input-row">
+            <select id="sex-input" class="user-input" name="sex">
+                <option value="" selected>Choose sex...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <input type="text" placeholder="Enter Age ..." id="age-input" class="user-input" />
+            <input type="text" placeholder="Enter Height (cm) ..." id="height-input" class="user-input" />
+            <input type="text" placeholder="Enter Weight (kg) ..." id="weight-input" class="user-input" />
+            <select id="units-input" class="user-input" name="units">
+                <option value="metric">Metric</option>
+                <option value="imperial">Imperial</option>
+            </select>
+        </div>
+        <div id="runners-table"></div>
+    </div>
+</main>
+</body>
+</html>
