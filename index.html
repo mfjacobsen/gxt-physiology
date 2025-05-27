@@ -3,71 +3,92 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Treadmill Physiology Explorer</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="js/global.js" type="module" defer></script>
+    <title>Exertion to Exhaustion</title>
+
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/animation.css" />
+    <link rel="stylesheet" href="css/personal.css" />
+    <link rel="stylesheet" href="css/demographic.css" />
+
+    <script src="js/animation.js" type="module" defer></script>
+    <script src="js/personal.js" type="module" defer></script>
+    <script src="js/demographic.js" type="module" defer></script>
+
 </head>
 <body>
-    <header class="header">
-        <h1 class="title">Pushing the Limits: How Elite Runners Outlast the Rest</h1>
-        <p class="subtitle">
-            An interactive visualization showing how heart rate, breathing, and oxygen use change during treadmill tests, <br>
-            highlighting how faster runners stay steady longer and take more time to reach their limits. <br>
-            Based on PhysioNet data from the University of Málaga, Spain.
-        </p>
-    </header>
+<main>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
 
-    <main>
-
-        <section class="intro" style="max-width: 900px; margin: 3rem auto; padding: 0 1rem; line-height: 1.6; font-size: 1rem;">
-            <p>
-                <strong>Introduction:</strong> Our project focuses on how heart rate, breathing rate, and oxygen consumption change
-                over time during treadmill running tests.
-                The data comes from breath-by-breath physiological measurements collected by the University of Málaga, Spain, and
-                published on PhysioNet.
-                The main chart shows how many runners remain on the treadmill over time, while three bar charts below display
-                average heart rate,
-                respiratory rate, and oxygen uptake at each moment, grouped by performance level. All charts update interactively as
-                users explore the timeline,
-                helping them understand how the body responds to increasing physical stress.</p>
-
-        </section>
-
-        </section>
-        <div id = "main-window">
-            <div id="chart"></div>
-            <div id="sub-window">
-                <div id="sub-chart-1"></div>
-                <div id="sub-chart-2"></div>
-                <div id="sub-chart-3"></div>
+    <div class="container">
+        <div class="visual">
+            <div class="runner-row">
+                <div class="runner-img-wrapper">
+                    <img id="runner-static" src="IntroAnimation/static_runner.png" class="runner-img">
+                    <img id="runner-animated" src="IntroAnimation/runner.gif" class="runner-img" style="display: none;">
+                </div>
+                <div class="runner-info info-box">
+                    <h2>Runner Info</h2>
+                    <p><strong>ID:</strong> <span id="runner-id">--</span></p>
+                    <p><strong>Age:</strong> <span id="runner-age">--</span></p>
+                    <p><strong>Sex:</strong> <span id="runner-sex">--</span></p>
+                    <p><strong>Weight:</strong> <span id="runner-weight">--</span> kg</p>
+                    <p><strong>Height:</strong> <span id="runner-height">--</span> cm</p>
+                </div>
+            </div>
+    
+            <div class="bar-section">
+                <div class="timer-label"><strong>Time Elapsed:</strong> <span id="time-label">00:00</span></div>
+                <svg width="600" height="40">
+                    <rect class="bar-bg" x="0" y="5" width="600" height="30" rx="5" ry="5"></rect>
+                    <rect class="bar-fill" x="0" y="5" width="0" height="30" rx="5" ry="5"></rect>
+                </svg>
+            </div>
+    
+            <div class="controls">
+                <button id="play-btn">▶ Play</button>
+                <button id="pause-btn">⏸ Pause</button>
+                <button id="reset-btn">⟳ Reset</button>
             </div>
         </div>
+    
+        <div class="sidebar info-box">
+            <h2>Live Stats</h2>
+            <p><strong>Heart Rate:</strong> <span id="hr">--</span> bpm</p>
+            <p><strong>O₂ Rate:</strong> <span id="o2">--</span> ml/min</p>
+            <p><strong>CO₂ Rate:</strong> <span id="co2">--</span> ml/min</p>
+            <p><strong>Breathing Rate:</strong> <span id="rr">--</span> breaths/min</p>
+            <p><strong>Ventilation (VE):</strong> <span id="ve">--</span> L/min</p>
+            <p><strong>Distance:</strong> <span id="dist">--</span> km</p>
+        </div>
+    </div>
+    <div id="threshold-message" class="threshold-box" style="display: none;"></div>
 
-        <section class="writeup" style="max-width: 900px; margin: 3rem auto; padding: 0 1rem; line-height: 1.6; font-size: 1rem;">
-            <p>
-                From the start, we noticed a clear trend from the PhysioNet data: participants gradually dropped out as the trial progressed. This observation raised a natural question: What physiological factors might explain when and why runners reach their limit?
-            </p>
-            <p>
-                    Thus, we designed the visualization to highlight group-level differences in endurance and efficiency. Time was transformed from breath-based timestamps 
-                to seconds, then formatted as minutes and seconds to make the timeline intuitive. Runners were split into five performance groups based on their 
-                maximum treadmill speed. Color was used consistently across charts to represent these groups, helping users track them easily. We chose bar charts 
-                for the physiological metrics to support clear, direct comparison between groups at any moment. The y-axis ranges were fixed to ensure comparability 
-                across time. Our decision to use a survival-style curve reflects our goal of making group dropout patterns and corresponding physiological changes 
-                more visible and intuitive.
-            </p>
-            <p>
-                    To prepare the data, we filtered out tests that were too short or irregular and aligned the timeline so that zero marked the start of the effort phase. 
-                We summarized the breath-level measurements into second-by-second values and grouped them by performance level. For each time point, we computed the 
-                number of runners still active and the average heart rate, breathing rate, and VO₂ uptake, then exported these into CSV files for visualization.
-            </p>
-            <p>
-                    We estimate the project took about 20 to 30 person-hours. The most time-intensive stage was early exploration, processing over ten features, testing 
-                different visual structures, and iterating through multiple design ideas. Each version helped us better understand the data and shaped the final product 
-                into something both informative and easy to explore. Working as a team is important. Raymond worked on exploratory data analysis (EDA), data cleaning, and 
-                preparation, Matthew worked on on EDA, design, and data interactive visualization, Huize worked on EDA, story-telling, and project staging.
-            </p>
-        </section>
-    </main>
-    <script src="js/hm.js" type="module" defer></script>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <div id="personal-vis">
+        <h1 id="personal-vis-title"> Explore Runners Similar to You</h1>
+        <div id="input-row">
+            <select id="sex-input" class="user-input" name="sex">
+                <option value="" selected>Choose sex...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <input type="text" placeholder="Enter Age ..." id="age-input" class="user-input" />
+            <input type="text" placeholder="Enter Height (cm) ..." id="height-input" class="user-input" />
+            <input type="text" placeholder="Enter Weight (kg) ..." id="weight-input" class="user-input" />
+            <select id="units-input" class="user-input" name="units">
+                <option value="metric">Metric</option>
+                <option value="imperial">Imperial</option>
+            </select>
+        </div>
+        <div id="personal-vis-content">
+            <div id="runners-table"></div>
+            <div id="runners-bar-plot"></div>
+        </div>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+
+</main>
 </body>
 </html>
