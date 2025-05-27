@@ -146,7 +146,7 @@ document.getElementById("reset-btn").onclick = () => {
   messageBox.style.display = "none";
 };
 
-d3.csv("../data/animation/clean_runner_840.csv").then(csvData => {
+d3.csv("data/animation/clean_runner_840.csv").then(csvData => {
   data = csvData;
   data.forEach(d => {
     d.time = +d.time;

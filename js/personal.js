@@ -1,8 +1,8 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
-const runnersDataPath = "../data/personal/runners_data.csv";
-const runnersStatsPath = "../data/personal/runners_stats.csv";
-const runnersTestsPaths = "../data/personal/runners_tests.csv";
+const runnersDataPath = "data/personal/runners_data.csv";
+const runnersStatsPath = "data/personal/runners_stats.csv";
+const runnersTestsPaths = "data/personal/runners_tests.csv";
 
 const sexInput = document.getElementById("sex-input");
 const ageInput = document.getElementById("age-input");

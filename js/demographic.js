@@ -62,7 +62,7 @@ const tooltip = container.append('div')
   .style('display','none');
 
 // ─── LOAD & PROCESS ─────────────────────────────────────────────────────────
-d3.csv('../data/plot/demographic_viz.csv').then(raw => {
+d3.csv('data/plot/demographic_viz.csv').then(raw => {
   const data = raw.map(d => ({
     sex:           d.Sex,
     bmi_group:     d.bmi_group,
