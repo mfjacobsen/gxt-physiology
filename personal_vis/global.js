@@ -10,6 +10,11 @@ const heightInput = document.getElementById("height-input");
 const weightInput = document.getElementById("weight-input");
 const unitsSelect = document.getElementById("units-input");
 
+const numRunners = 10;
+
+let xScaleRunners, yScaleRunners;
+
+
 // Loads and formats the runners demographic data
 async function loadRunnersData(path) {
     const data = await d3.csv(path, row => ({
@@ -51,11 +56,11 @@ async function loadRunnersStats(path) {
 async function loadRunnersTests(path) {
     const data = await d3.csv(path, row => ({
         id_test: row.ID_test,
-        time: +row.Time,
-        pace_metric: +row.pace_metric,
-        pace_imperial: +row.pace_imperial,
-        dist_metric: +row.Dist_km,
-        dist_imperial: +row.Dist_miles,
+        time: +row.time,
+        pace_metric: row.pace_metric,
+        pace_imperial: row.pace_imperial,
+        dist_metric: +row.dist_km,
+        dist_imperial: +row.dist_miles,
         speed: +row.Speed,
         hr: +row.HR,
         rr: +row.RR,
@@ -65,6 +70,13 @@ async function loadRunnersTests(path) {
     }));
 
     return data;
+}
+
+// Formats seconds to minutes and seconds
+function formatTimeMMSS(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 // Adds units in the input fields
@@ -111,7 +123,7 @@ function computeDistance(row, input, stats, isMetric) {
     return features.length > 0 ? features.reduce((a, b) => a + b, 0) : Infinity;
   }
 
-// Renders the runners table based on the loaded data
+// Renders the runners table based on the loaded data and input fields
 function renderRunnersTable(data, stats) {
     const isMetric = unitsSelect.value === "metric";
     const sex = sexInput.value.trim().toLowerCase();
@@ -140,7 +152,7 @@ function renderRunnersTable(data, stats) {
             .sort((a, b) => a.distance - b.distance)
     }
 
-    filtered = filtered.slice(0,10);
+    filtered = filtered.slice(0,numRunners);
 
     const container = d3.select("#runners-table");
     container.html("");
@@ -184,18 +196,113 @@ function renderRunnersTable(data, stats) {
         .text(d => d);
 }
 
-// Gets table row height for table layout
-function getTableRowHeight(table_id = "#runners-table tbody tr") {
-    const rows = d3.selectAll(table_id).nodes();
-    
-    const height = rows[0].getBoundingClientRect().height;
+// Gets table height for plot layout
+function getTableHeights() {
+    // Get body height
+    const tbody = document.querySelector("#runners-table tbody");
+    const bodyHeight = tbody ? tbody.getBoundingClientRect().height : 0;
 
-    return height 
+    // Get header height
+    const thead = document.querySelector("#runners-table thead");
+    const headerHeight = thead ? thead.getBoundingClientRect().height : 0;
+
+    return { bodyHeight, headerHeight };
 }
 
 // Renders the runners bar plot
-function renderRunnersPlot(data, container) {
+function renderRunnersPlot(container = "#runners-bar-plot") {
 
+    const { bodyHeight, headerHeight } = getTableHeights();
+
+    const margin = { 
+        top: headerHeight, 
+        right: 20, 
+        bottom: 0, 
+        left: 40 
+    };
+
+    const height = bodyHeight + margin.top + margin.bottom;
+    const width = 600;
+
+    const usableArea = {
+        width: width - margin.left - margin.right,
+        height: height - margin.top - margin.bottom,
+        top: margin.top,
+        right: width - margin.right,
+        bottom: height - margin.bottom,
+        left: margin.left
+    }
+
+    // Create svg element
+    const svg = d3
+        .select(container)
+        .append('svg')
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .style("width", "100%")
+        .style("height", `${height}px`);
+
+    // Define axis scales  
+    xScaleRunners = d3
+        .scaleLinear()
+        .domain([0, 1100])
+        .range([usableArea.left, usableArea.right]);
+
+    yScaleRunners = d3
+        .scaleBand()
+        .domain(d3.range(numRunners).map(String))
+        .range([usableArea.top, usableArea.bottom]);
+
+    const xAxis = d3
+            .axisBottom(xScaleRunners)
+            .tickFormat(formatTimeMMSS);
+    const yAxis = d3.axisLeft(yScaleRunners);
+
+    // Draw gridlines
+    const gridlines = svg
+        .append('g')
+        .attr('class', 'gridlines')
+        .attr('transform', `translate(${usableArea.left}, 0)`)
+        .call(d3.axisLeft(yScaleRunners).tickFormat('').tickSize(-usableArea.width));
+
+    // Draw axes
+    svg
+        .append('g')
+        .attr('transform', `translate(0, ${usableArea.bottom})`)
+        .call(xAxis);
+    svg
+        .append('g')
+        .attr('transform', `translate(${usableArea.left}, 0)`)
+        .call(yAxis);
+
+    svg.append("g").attr("class", "bars");
+}
+
+// Update the runners plot
+function updateRunnersPlot(filtered, testsData, container = "#runners-bar-plot") {
+
+    // Join: get max test time for each id_test in filtered
+    const testMap = d3.group(testsData, d => d.id_test);
+
+    const dataWithTimes = filtered.map(d => {
+        const tests = testMap.get(d.id_test) || [];
+        const maxTime = d3.max(tests, t => t.time) || 0;
+
+        return {
+            id_test: d.id_test,
+            distance: d.distance ?? Infinity, // optional if you want to color/sort
+            time: maxTime
+        };
+    });
+
+    svg.selectAll("rect")
+        .data(dataWithTimes)
+        .join("rect")
+        .attr("x", xScaleRunners(0))
+        .attr("y", d => yScaleRunners(d.id_test))
+        .attr("width", d => xScaleRunners(d.time) - xScaleRunners(0))
+        .attr("height", yScaleRunners.bandwidth())
+        .attr("fill", "#4682b4");
 }
 
 // Add event listeners to input fields
@@ -256,17 +363,17 @@ function addInputEventListeners() {
         heightInput.value = "";
         weightInput.value = "";
 
-        renderRunnersTable(runnersData);
+        renderRunnersTable(runnersData, runnersStats);
     });
 }
 
 const runnersData = await loadRunnersData(runnersDataPath);
 const runnersStats = await loadRunnersStats(runnersStatsPath);
-const runnersTests = await loadRunnersTests(runnersTestsPaths);
+//const runnersTests = await loadRunnersTests(runnersTestsPaths);
 
 addInputEventListeners();
 renderRunnersTable(runnersData, runnersStats);
+renderRunnersPlot();
 
-console.log("Table row height:  ", getTableRowHeight());
 
 

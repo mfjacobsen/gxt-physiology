@@ -52,3 +52,17 @@ main {
     background-color: #f2f2f2;
     font-weight: bold;
 }
+
+#personal-vis-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+#runners-table {
+    flex: 1;
+}
+
+#runners-bar-plot {
+    flex: 3;
+}
