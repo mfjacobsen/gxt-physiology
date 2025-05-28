@@ -1,62 +1,76 @@
-/* Huize's Viz Styles */
-/* Container & positioning */
+/* ── DEMOGRAPHIC VIZ (Dark Theme) ──────────────────────────────────────────── */
 #demographic-viz-container {
   font-family: sans-serif;
-  background: #fafafa;
+  background: #121212;        /* dark background */
+  color: #eee;                /* default text */
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
   position: relative;
 }
 
-/* Dropdown controls */
-#demo-select {
-  border: 1px solid #ccc;
+/* Dropdown control */
+#demographic-viz-container #demo-select {
+  background: #333;
+  color: #eee;
+  border: 1px solid #555;
   border-radius: 4px;
-  background: #fff;
   cursor: pointer;
+  padding: 4px 8px;
+  font-size: 14px;
 }
 
-#demographic-vis-container svg text {
-    fill: black;}
-
-/* Axes */
+/* AXES */
 #demographic-viz-container .axis path,
 #demographic-viz-container .axis line {
-  stroke: #ccc;
+  stroke: #555 !important;
 }
 #demographic-viz-container .axis text {
+  fill: #eee !important;
   font-size: 12px;
-  fill: #333;
 }
 #demographic-viz-container .axis-label {
+  fill: #fff !important;
   font-size: 13px;
   font-weight: bold;
-  fill: #333;
 }
 
-/* Lines */
+/* LINES */
 #demographic-viz-container .line {
-  fill: none;
   stroke-width: 2px;
 }
 
-/* Legend */
+/* LEGEND */
 #demographic-viz-container .legend text {
+  fill: #eee !important;
   font-size: 12px;
-  fill: #333;
 }
 #demographic-viz-container .legend rect {
-  stroke: #666;
+  stroke: #ccc;
+  stroke-width: 1px;
 }
 
+/* TOOLTIP */
 #demographic-viz-container .tooltip {
   position: absolute;
-  background: rgba(255,255,255,0.9);
+  pointer-events: none;            /* never steal mouse */
+  z-index: 1000;                   /* on top */
+  background: rgba(0,0,0,0.8);     /* dark, semi-transparent */
+  color: #fff;                     /* white text */
   border: 1px solid #999;
   padding: 6px 8px;
-  pointer-events: none;
   font-size: 12px;
   border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* Legend text on dark background */
+#demographic-viz-container .legend text {
+  fill: #fff !important;       /* make legend labels white */
+}
+
+/* Vertical hover line */
+#demographic-viz-container line.vline {
+  stroke: #eee   !important;   /* light grey instead of black */
+  stroke-width: 1.5;           /* a bit thinner if you like */
 }

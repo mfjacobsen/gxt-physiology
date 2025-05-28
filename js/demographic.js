@@ -1,69 +1,64 @@
-// js/hm.js
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 const demographicVizPath = './data/plot/demographic_viz.csv';
 
-// ─── CONTAINER & DROPDOWN ────────────────────────────────────────────────────
+// ─── 1) SETUP CONTAINER & DROPDOWN ────────────────────────────────────────────
 const container = d3.select('main')
   .append('div')
     .attr('id','demographic-viz-container')
     .style('width','800px')
-    .style('margin','0 auto')
+    .style('margin','40px auto')
     .style('position','relative');
 
-// Bin selector (top-right)
 const controlDiv = container.append('div')
-  .style('position','absolute')
-  .style('top','10px')
-  .style('right','10px');
+    .style('position','absolute')
+    .style('top','10px')
+    .style('right','10px');
 
 controlDiv.append('label')
-  .attr('for','demo-select')
-  .text('Bin by: ')
-  .style('font-weight','bold')
-  .style('margin-right','4px');
+    .attr('for','demo-select')
+    .text('Bin by: ')
+    .style('font-weight','bold')
+    .style('margin-right','4px');
 
 const select = controlDiv.append('select')
-  .attr('id','demo-select')
-  .style('padding','4px 8px')
-  .style('font-size','14px');
+    .attr('id','demo-select')
+    .style('padding','4px 8px')
+    .style('font-size','14px');
 
-const bins = ['sex','bmi_group','age_group'];
-select.selectAll('option')
-  .data(bins)
-  .enter().append('option')
-    .attr('value', d => d)
-    .text(d => d.replace('_',' ').toUpperCase());
+['sex','bmi_group','age_group']
+  .forEach(bin =>
+    select.append('option')
+      .attr('value',bin)
+      .text(bin.replace('_',' ').toUpperCase())
+  );
 
-// ─── SVG DIMENSIONS ──────────────────────────────────────────────────────────
-const margin = { top:50, right:150, bottom:50, left:60 };
-const width  = 800 - margin.left - margin.right;
-const height = 300 - margin.top  - margin.bottom;
+// three SVGs, stacked
+const MARGIN = { top:50, right:150, bottom:50, left:60 };
+const WIDTH  = 800 - MARGIN.left - MARGIN.right;
+const HEIGHT = 300 - MARGIN.top  - MARGIN.bottom;
 
-// create three canvases, stacked
-const svgO2 = container.append('svg')
-    .attr('width',  width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-  .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+function makeSvg(offsetY=0){
+  return container.append('svg')
+    .style('margin-top', offsetY+'px')
+    .attr('width',  WIDTH  + MARGIN.left + MARGIN.right)
+    .attr('height', HEIGHT + MARGIN.top  + MARGIN.bottom)
+    .append('g')
+      .attr('transform', `translate(${MARGIN.left},${MARGIN.top})`);
+}
 
-const svgHR = container.append('svg')
-    .attr('width',  width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .style('margin-top','20px')
-  .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
-const svgRR = container.append('svg')
-    .attr('width',  width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .style('margin-top','20px')
-  .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+const svgO2 = makeSvg(0);
+const svgHR = makeSvg(20);
+const svgRR = makeSvg(20);
 
 // shared tooltip
 const tooltip = container.append('div')
   .attr('class','tooltip')
-  .style('display','none');
+  .style('display','none')
+  .style('pointer-events','none')
+  .style('z-index','1000');
 
-// ─── LOAD & PROCESS ─────────────────────────────────────────────────────────
+// ─── 2) LOAD DATA ─────────────────────────────────────────────────────────────
 d3.csv(demographicVizPath).then(raw => {
   const data = raw.map(d => ({
     sex:           d.Sex,
@@ -75,137 +70,177 @@ d3.csv(demographicVizPath).then(raw => {
     respRate:      +d.RR
   }));
 
-  // on bin‐change, redraw all three
   select.on('change', () => updateAll(select.property('value')));
   updateAll(select.property('value'));
 
   function updateAll(binField) {
-    drawChart(svgO2, data, binField, 'o2_efficiency', 'O₂ Efficiency (ml/L)',    d3.format('.2f'));
-    drawChart(svgHR, data, binField, 'heartRate',      'Avg Heart Rate (bpm)',    d3.format('.0f'));
-    drawChart(svgRR, data, binField, 'respRate',       'Avg Resp Rate (breaths/min)', d3.format('.0f'));
+    // clear any old vlines
+    d3.selectAll('line.vline').remove();
+
+    // define each chart’s config
+    const configs = [
+      { svg: svgO2, key: 'o2_efficiency', label: 'O₂ Efficiency (ml/L)',    fmt: d3.format('.2f') },
+      { svg: svgHR, key: 'heartRate',      label: 'Avg Heart Rate (bpm)',    fmt: d3.format('.0f') },
+      { svg: svgRR, key: 'respRate',       label: 'Avg Resp Rate (breaths/min)', fmt: d3.format('.0f') }
+    ];
+
+    // draw them and merge cfg + returned chart internals
+    const charts = configs.map(cfg => {
+      const chart = drawChart(data, binField, cfg.svg, cfg.key, cfg.label, cfg.fmt);
+      return { ...cfg, ...chart };
+    });
+
+    // attach mousemove handlers
+    charts.forEach(chart => {
+      chart.overlay.on('mousemove', event => {
+        // find nearest time key
+        const [mx] = d3.pointer(event, chart.svg.node());
+        const t0 = chart.x.invert(mx);
+        let i = d3.bisector(d => d).left(chart.timeKeys, t0);
+        if (i === 0) i = 0;
+        else if (i === chart.timeKeys.length) i = chart.timeKeys.length - 1;
+        else {
+          const b = chart.timeKeys[i-1], a = chart.timeKeys[i];
+          i = (t0 - b) < (a - t0) ? i - 1 : i;
+        }
+        const tKey = chart.timeKeys[i];
+        const rows = chart.lookup.get(tKey);
+        if (!rows) return;
+
+        // show vertical line in all charts
+        charts.forEach(c => {
+          c.vline
+            .attr('x1', c.x(tKey))
+            .attr('x2', c.x(tKey))
+            .style('opacity', 1);
+        });
+
+        // build tooltip content using each chart’s formatter
+        let html = `<strong>Time:</strong> ${Math.floor(tKey/60)}:${String(tKey%60).padStart(2,'0')}<br>`;
+        rows.forEach(r => {
+          html += `${r.group}: ${chart.fmt(r.avg)}<br>`;
+        });
+
+        // position and show tooltip
+        const [cx, cy] = d3.pointer(event, container.node());
+        tooltip.html(html)
+          .style('left',  (cx + 10) + 'px')
+          .style('top',   (cy + 10) + 'px')
+          .style('display','block');
+      });
+    });
+
+    // hide lines & tooltip on mouse leave
+    charts.forEach(chart =>
+      chart.svg.on('mouseleave', () => {
+        d3.selectAll('line.vline').style('opacity', 0);
+        tooltip.style('display','none');
+      })
+    );
   }
 });
 
-// ─── DRAW FUNCTION WITH SMOOTHING ────────────────────────────────────────────
-function drawChart(svg, data, binField, key, yLabel, tickFmt) {
-  // 1) GROUP & AVERAGE
-  const grouped = d3.group(data, d=>d[binField], d=>d.time);
-  const rawAvg = Array.from(grouped, ([grp, tmap]) =>
+// ─── 3) DRAW SINGLE CHART ─────────────────────────────────────────────────────
+function drawChart(data, binField, svg, key, yLabel, tickFmt) {
+  // group & mean
+  const grouped = d3.group(data, d => d[binField], d => d.time);
+  const raw = Array.from(grouped, ([g, tmap]) =>
     Array.from(tmap, ([t, vals]) => ({
-      group: grp,
-      time:  +t,
-      avg:   d3.mean(vals, v=>v[key])
+      group: g, time: +t, avg: d3.mean(vals, v => v[key])
     }))
   ).flat()
-   .filter(d=>isFinite(d.time) && isFinite(d.avg))
-   .sort((a,b)=>a.time-b.time);
+   .filter(d => isFinite(d.time) && isFinite(d.avg))
+   .sort((a, b) => a.time - b.time);
 
-  // 2) SMOOTH (30s window)
-  const windowSize = 30;
-  const smoothed = [];
-  for (const grp of d3.group(rawAvg, d=>d.group).keys()) {
-    const pts = rawAvg.filter(d=>d.group===grp);
-    for (const p of pts) {
-      const vals = pts
-        .filter(q=>Math.abs(q.time - p.time) <= windowSize/2)
-        .map(q=>q.avg);
-      smoothed.push({ group: grp, time: p.time, avg: d3.mean(vals) });
-    }
-  }
-  smoothed.sort((a,b)=>a.time-b.time);
-
-  // lookup for tooltip
-  const lookup = d3.group(smoothed, d=>d.time);
-
-  // 3) SCALES & AXES
-  const x = d3.scaleLinear()
-    .domain([ d3.min(data, d=>d.time), d3.max(smoothed, d=>d.time) ])
-    .range([0, width]);
-  const xAxis = d3.axisBottom(x)
-    .tickFormat(t => {
-      const m = Math.floor(t/60), s = String(Math.round(t%60)).padStart(2,'0');
-      return `${m}:${s}`;
+  // smooth with a sliding window
+  const W = 30, smooth = [];
+  for (const g of new Set(raw.map(d => d.group))) {
+    const pts = raw.filter(d => d.group === g);
+    pts.forEach(p => {
+      const win = pts.filter(q => Math.abs(q.time - p.time) <= W/2).map(q => q.avg);
+      smooth.push({ group: g, time: p.time, avg: d3.mean(win) });
     });
+  }
+  smooth.sort((a, b) => a.time - b.time);
 
+  // lookup & keys
+  const lookup   = d3.group(smooth, d => d.time);
+  const timeKeys = Array.from(lookup.keys()).sort((a, b) => a - b);
+
+  // scales
+  const x = d3.scaleLinear()
+    .domain([ d3.min(data, d => d.time), d3.max(smooth, d => d.time) ])
+    .range([0, WIDTH]);
   const y = d3.scaleLinear()
-    .domain([0, d3.max(smoothed, d=>d.avg)])
-    .nice()
-    .range([height, 0]);
-  const yAxis = d3.axisLeft(y).tickFormat(tickFmt);
+    .domain([0, d3.max(smooth, d => d.avg)]).nice()
+    .range([HEIGHT, 0]);
 
-  const color = d3.scaleOrdinal(d3.schemeCategory10)
-    .domain([...new Set(smoothed.map(d=>d.group))]);
-
-  // 4) CLEAR & DRAW
+  // clear
   svg.selectAll('*').remove();
 
+  // axes
   svg.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(xAxis)
+      .attr('transform', `translate(0,${HEIGHT})`)
+      .call(d3.axisBottom(x).tickFormat(t => {
+        const m = Math.floor(t/60), s = String(Math.round(t%60)).padStart(2,'0');
+        return `${m}:${s}`;
+      }))
     .append('text')
       .attr('class','axis-label')
-      .attr('x', width/2).attr('y', 40)
-      .attr('fill','black')
+      .attr('x', WIDTH/2).attr('y', 40)
       .text('Time (mm:ss)');
 
   svg.append('g')
-      .call(yAxis)
+      .call(d3.axisLeft(y).tickFormat(tickFmt))
     .append('text')
       .attr('class','axis-label')
       .attr('transform','rotate(-90)')
-      .attr('x', -height/2).attr('y', -40)
-      .attr('fill','black')
+      .attr('x', -HEIGHT/2).attr('y', -40)
       .text(yLabel);
 
+  // lines
   const line = d3.line()
-    .defined(d=>isFinite(d.avg))
-    .x(d=>x(d.time))
-    .y(d=>y(d.avg));
+    .defined(d => isFinite(d.avg))
+    .x(d => x(d.time))
+    .y(d => y(d.avg));
 
-  for (const grp of color.domain()) {
+  [...new Set(smooth.map(d => d.group))].forEach((g, i) => {
     svg.append('path')
-      .datum(smoothed.filter(d=>d.group===grp))
+      .datum(smooth.filter(d => d.group === g))
       .attr('class','line')
-      .attr('stroke', color(grp))
+      .attr('stroke', d3.schemeCategory10[i])
       .attr('fill','none')
-      .attr('stroke-width', 2)
+      .attr('stroke-width',2)
       .attr('d', line);
-  }
-
-  const legend = svg.append('g')
-    .attr('transform', `translate(${width+10},0)`);
-  color.domain().forEach((g,i) => {
-    const row = legend.append('g')
-      .attr('transform', `translate(0,${i*20})`);
-    row.append('rect')
-      .attr('width',10).attr('height',10)
-      .attr('fill', color(g));
-    row.append('text')
-      .attr('x',15).attr('y',10)
-      .text(g);
   });
 
-  // 5) TOOLTIP OVERLAY
-  svg.append('rect')
+  // legend
+  const legend = svg.append('g')
+    .attr('transform', `translate(${WIDTH + 10},0)`);
+
+  [...new Set(smooth.map(d => d.group))].forEach((g, i) => {
+    const row = legend.append('g').attr('transform', `translate(0,${i * 20})`);
+    row.append('rect').attr('width',10).attr('height',10).attr('fill', d3.schemeCategory10[i]);
+    row.append('text')
+  .attr('x',15)
+  .attr('y',10)
+  .style('fill','#fff')   // force white
+  .text(g);
+
+  });
+
+  // vertical line & overlay
+  const vline = svg.append('line')
+    .attr('class','vline')
+    .attr('y1',0).attr('y2',HEIGHT)
+    .style('stroke','#333')
+    .style('stroke-dasharray','4 2')
+    .style('opacity',0);
+
+  const overlay = svg.append('rect')
     .attr('class','overlay')
-    .attr('width', width)
-    .attr('height', height)
-    .style('fill','none')
-    .style('pointer-events','all')
-    .on('mouseover', () => tooltip.style('display',null))
-    .on('mouseout',  () => tooltip.style('display','none'))
-    .on('mousemove', event => {
-      const [gx] = d3.pointer(event);
-      const t = Math.round(x.invert(gx));
-      const rows = lookup.get(t);
-      if (!rows) return;
+    .attr('width', WIDTH).attr('height', HEIGHT)
+    .style('fill','none').style('pointer-events','all');
 
-      let html = `<strong>Time:</strong> ${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}<br>`;
-      rows.forEach(r => html += `${r.group}: ${tickFmt(r.avg)}<br>`);
-
-      const [cx, cy] = d3.pointer(event, container.node());
-      tooltip.html(html)
-        .style('left', (cx+10)+'px')
-        .style('top',  (cy+10)+'px');
-    });
+  return { svg, x, lookup, timeKeys, vline, overlay };
 }
