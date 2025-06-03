@@ -1,76 +1,106 @@
-/* ── DEMOGRAPHIC VIZ (Dark Theme) ──────────────────────────────────────────── */
+/* css/demographic.css */
+
+/* ─── Container & Controls ─────────────────────────────────────────────────── */
 #demographic-viz-container {
-  font-family: sans-serif;
-  background: #121212;        /* dark background */
-  color: #eee;                /* default text */
+  font-family: Arial, sans-serif;
+  background: #fafafa;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin: 0 auto;
+  max-width: 840px;
   position: relative;
 }
 
-/* Dropdown control */
-#demographic-viz-container #demo-select {
-  background: #333;
-  color: #eee;
-  border: 1px solid #555;
-  border-radius: 4px;
-  cursor: pointer;
+#control-div {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.control-label {
+  font-weight: bold;
+  margin-right: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.control-select {
   padding: 4px 8px;
   font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
 }
 
-/* AXES */
-#demographic-viz-container .axis path,
-#demographic-viz-container .axis line {
-  stroke: #555 !important;
+/* ─── Chart Titles ─────────────────────────────────────────────────────────── */
+.chart-svg {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
-#demographic-viz-container .axis text {
-  fill: #eee !important;
-  font-size: 12px;
+
+.chart-title {
+  font-size: 16px;
+  font-weight: bold;
+  fill: #333;
+  text-anchor: middle;
 }
-#demographic-viz-container .axis-label {
-  fill: #fff !important;
+
+.x-axis-label, .y-axis-label {
   font-size: 13px;
   font-weight: bold;
+  fill: #333;
 }
 
-/* LINES */
-#demographic-viz-container .line {
-  stroke-width: 2px;
-}
-
-/* LEGEND */
-#demographic-viz-container .legend text {
-  fill: #eee !important;
-  font-size: 12px;
-}
-#demographic-viz-container .legend rect {
+/* ─── Axes ─────────────────────────────────────────────────────────────────── */
+.chart-svg .x-axis path,
+.chart-svg .x-axis line,
+.chart-svg .y-axis path,
+.chart-svg .y-axis line {
   stroke: #ccc;
+}
+
+.chart-svg .x-axis text,
+.chart-svg .y-axis text {
+  font-size: 12px;
+  fill: #333;
+}
+
+/* ─── Bars ─────────────────────────────────────────────────────────────────── */
+.bar {
+  opacity: 0.9;
+}
+
+.bar:hover {
+  opacity: 1;
+  stroke: #555;
   stroke-width: 1px;
 }
 
-/* TOOLTIP */
-#demographic-viz-container .tooltip {
+/* ─── Legend ───────────────────────────────────────────────────────────────── */
+.legend rect {
+  /* border around each colored square */
+  stroke: #333;
+  stroke-width: 1px;
+}
+
+.legend-text {
+  font-size: 12px;
+  fill: #333;
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────────────────── */
+.tooltip {
   position: absolute;
-  pointer-events: none;            /* never steal mouse */
-  z-index: 1000;                   /* on top */
-  background: rgba(0,0,0,0.8);     /* dark, semi-transparent */
-  color: #fff;                     /* white text */
-  border: 1px solid #999;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  border-radius: 4px;
   padding: 6px 8px;
   font-size: 12px;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-}
-
-/* Legend text on dark background */
-#demographic-viz-container .legend text {
-  fill: #fff !important;       /* make legend labels white */
-}
-
-/* Vertical hover line */
-#demographic-viz-container line.vline {
-  stroke: #eee   !important;   /* light grey instead of black */
-  stroke-width: 1.5;           /* a bit thinner if you like */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none; /* toggled in JS */
 }
