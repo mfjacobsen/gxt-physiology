@@ -1,108 +1,157 @@
 body {
-    font-family: sans-serif;
-    background: #000000;
-    color: #fff;
-    margin: 40px;
-  }
-  
-  .container {
-    display: flex;
-    align-items: flex-start;
-    gap: 40px;
-  }
-  
-  .visual {
-    flex-grow: 1;
-  }
-  
-  .runner-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 30px;
-    margin-bottom: 20px;
-  }
-  
-  .runner-img-wrapper {
-    width: 280px;
-    height: 280px;
-  }
-  
-  .runner-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-  }
-  
-  .bar-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-  
-  .timer-label {
-    font-size: 20px;
-    margin-bottom: 6px;
-  }
-  
-  .bar-bg {
-    fill: #333;
-  }
-  
-  .bar-fill {
-    fill: #4CAF50;
-  }
-  
-  .controls button {
-    margin-right: 10px;
-    padding: 8px 16px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #play-btn {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  #pause-btn {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  #reset-btn {
-    background-color: #555;
-    color: white;
-  }
-  
-  .sidebar {
-    width: 240px;
-  }
-  
-  .info-box {
-    background: #222;
-    padding: 20px;
-    border-radius: 8px;
-    width: 260px;
-  }
-  
-  .threshold-box {
-    position: fixed;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #222;
-    color: #fff;
-    border: 2px solid #4CAF50;
-    border-radius: 10px;
-    padding: 20px 30px;
-    font-size: 18px;
-    text-align: center;
-    z-index: 999;
-    max-width: 500px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  }
-  
+  font-family: sans-serif;
+  background: #111;
+  color: #fff;
+  margin: 40px;
+}
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.visual {
+  flex-grow: 1;
+}
+
+.runner-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.runner-img-wrapper {
+  width: 280px;
+  height: 280px;
+}
+
+.runner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.bar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.timer-label {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.bar-bg {
+  fill: #333;
+}
+
+.bar-fill {
+  fill: #4CAF50;
+}
+
+.controls button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#play-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#pause-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+#reset-btn {
+  background-color: #555;
+  color: white;
+}
+
+.info-box {
+  background: #222;
+  padding: 20px;
+  border-radius: 8px;
+  width: 240px;
+}
+
+/* Old popup — unused now but you can keep for fallback */
+.threshold-box {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222;
+  color: #fff;
+  border: 2px solid #4CAF50;
+  border-radius: 10px;
+  padding: 20px 30px;
+  font-size: 18px;
+  text-align: center;
+  z-index: 999;
+  max-width: 500px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* NEW: Side threshold message box */
+#threshold-side-message {
+  background: #222;
+  color: white;
+  padding: 16px 20px;
+  border-radius: 8px;
+  width: 260px;
+  margin-left: 10px;
+  border: 2px solid #4CAF50;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+#threshold-text {
+  margin-bottom: 10px;
+}
+
+#continue-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#continue-btn:hover {
+  background-color: #45a049;
+}
+
+.threshold-graph-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.threshold-graph-box {
+  background: black;
+  padding: 10px;
+  width: 720px;
+  color: white;
+}
+
+.threshold-graph-box h3 {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: white;
+}
