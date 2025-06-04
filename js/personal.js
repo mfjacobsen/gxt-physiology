@@ -346,7 +346,7 @@ function updateRunnersPlot(filtered, testsData, container = "#runners-bar-plot")
 
                     // Highlight bars
                     svg.select("g.bars").selectAll("rect")
-                        .attr("fill", r => r.id_test === d.id_test ? "#1e90ff" : "#a0b8d0");
+                        .attr("fill", r => r.id_test === d.id_test ? "#1e90ff" : "#a3b2c1");
 
                     // Highlight row
                     d3.selectAll("#runners-table tbody tr")
@@ -369,7 +369,7 @@ function updateRunnersPlot(filtered, testsData, container = "#runners-bar-plot")
 
                     svg.select("g.bars").selectAll("rect")
                         .attr("fill", r => {
-                            if (locked && selectedId) return r.id_test === selectedId ? "#1e90ff" : "#a0b8d0";
+                            if (locked && selectedId) return r.id_test === selectedId ? "#1e90ff" : "#a3b2c1";
                             return "#4682b4";
                         });
 
@@ -402,7 +402,7 @@ function updateRunnersPlot(filtered, testsData, container = "#runners-bar-plot")
                         locked = true;
 
                         svg.select("g.bars").selectAll("rect")
-                            .attr("fill", r => r.id_test === selectedId ? "#1e90ff" : "#a0b8d0");
+                            .attr("fill", r => r.id_test === selectedId ? "#1e90ff" : "#a3b2c1");
 
                         d3.selectAll("#runners-table tbody tr")
                             .classed("runner-row-highlight", (_, i) => filtered[i].id_test === selectedId);
@@ -644,7 +644,7 @@ function updateThreshold1Plot(runnersTests, id_test) {
 
     const focusCircle = focusGroup.append("circle")
         .attr("r", 5)
-        .attr("fill", "purple");
+        .attr("fill", "lightgreen");
 
     const focusVLine = focusGroup.append("line")
         .attr("stroke", "white")
@@ -717,7 +717,7 @@ function updateThreshold1Plot(runnersTests, id_test) {
                     .attr("x2", xScaleRunners(nearest.time))
                     .attr("y1", yScaleRunners(selectedBarIndex))
                     .attr("y2", yScaleRunners(selectedBarIndex) + yScaleRunners.bandwidth())
-                    .attr("stroke", "purple")
+                    .attr("stroke", "lightgreen")
                     .attr("stroke-width", 2);
 
                 tooltip.style.display = "none";

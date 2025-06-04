@@ -9,3 +9,21 @@ main {
     max-width: 1200px;
     margin: 0 auto;
 }
+
+.header {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#hook-terms {
+    padding: 50px;
+}
+
+#hook-terms ul {
+    text-align: left;
+    margin-left: 50px;
+    padding-left: 20px;
+}
+#hook-explanation {
+    padding: 30px;
+}
