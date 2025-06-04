@@ -223,22 +223,24 @@ function updateFrame() {
   if (!vt1Shown && currentTime >= VT1_TIME) {
     vt1Shown = true;
     showThresholdMessage(`
-      🟢 <strong>Aerobic Threshold Reached</strong><br>
-      The body starts producing energy anaerobically.<br>
-      Extra CO₂ is generated from acid buffering.
+      🟢 <strong>VT1 Reached</strong><br>
+      Your body needs more energy than oxygen can provide.<br>
+      It starts using a backup system that creates acid.<br>
+      Your body makes extra CO₂ while trying to neutralize it.
     `);
     return;
   }
-
+  
   if (!vt2Shown && currentTime >= VT2_TIME) {
     vt2Shown = true;
     showThresholdMessage(`
-      🔴 <strong>Anaerobic Threshold Reached</strong><br>
-      Buffering is maxed out. Hyperventilation begins.<br>
-      The body is nearing full exertion.
+      🔴 <strong>VT2 Reached</strong><br>
+      The acid is building up too fast to handle.<br>
+      Your body starts breathing much harder to get rid of CO₂.<br>
+      This helps stop your blood from getting too acidic.
     `);
     return;
-  }
+  }  
 
   if (currentTime >= totalTime) {
     clearInterval(interval);
