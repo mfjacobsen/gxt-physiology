@@ -1,18 +1,16 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
-const cleanRunnerPath = "./data/animation/clean_runner_840.csv";
+const cleanRunnerPath = "./data/animation/clean_runner_741_1.csv";
 
-// animation.js
 let interval;
 let step = 0;
 let playing = false;
 let totalTime, data;
 
-const VT1_TIME = 190; // replace with real value
-const VT2_TIME = 450; // replace with real value
+const VT1_TIME = 378;
+const VT2_TIME = 705;
 let vt1Shown = false;
 let vt2Shown = false;
-const messageBox = document.getElementById("threshold-message");
 
 const barWidth = 600;
 const intervalMs = 10;
@@ -22,21 +20,24 @@ const timeLabel = d3.select("#time-label");
 function showThresholdMessage(html) {
   clearInterval(interval);
   playing = false;
-  messageBox.innerHTML = html + "<br><br><em>Click to continue</em>";
-  messageBox.style.display = "block";
   d3.select("#runner-animated").style("display", "none");
   d3.select("#runner-static").style("display", "block");
 
+  const sideBox = document.getElementById("threshold-side-message");
+  document.getElementById("threshold-text").innerHTML = html;
+  sideBox.style.display = "block";
+
+  const continueBtn = document.getElementById("continue-btn");
   const continueHandler = () => {
-    messageBox.style.display = "none";
-    messageBox.removeEventListener("click", continueHandler);
+    sideBox.style.display = "none";
+    continueBtn.removeEventListener("click", continueHandler);
     d3.select("#runner-static").style("display", "none");
     d3.select("#runner-animated").style("display", "block");
     interval = setInterval(updateFrame, intervalMs);
     playing = true;
   };
 
-  messageBox.addEventListener("click", continueHandler);
+  continueBtn.addEventListener("click", continueHandler);
 }
 
 function drawThresholdMarkers() {
@@ -63,8 +64,153 @@ function drawThresholdMarkers() {
     .attr("stroke-dasharray", "4 2");
 }
 
+function initThresholdGraphs() {
+  const svg1 = d3.select("#threshold-graph-1").append("svg")
+    .attr("width", 720)
+    .attr("height", 480)
+    .style("background", "black")
+    .style("margin-right", "10px");
+
+  const svg2 = d3.select("#threshold-graph-2")
+    .style("margin-left", "-120px")
+    .append("svg")
+    .attr("width", 720)
+    .attr("height", 480)
+    .style("background", "black");
+
+  svg1.append("text")
+    .attr("x", 360)
+    .attr("y", 30)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "20px")
+    .attr("fill", "white")
+    .text("VCO₂ / VO₂ vs Time");
+
+  svg2.append("text")
+    .attr("x", 360)
+    .attr("y", 30)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "20px")
+    .attr("fill", "white")
+    .text("VE / VCO₂ vs Time");
+
+  svg1.append("g").attr("id", "x-axis-1").attr("transform", "translate(0,440)");
+  svg1.append("g").attr("id", "y-axis-1").attr("transform", "translate(70,0)");
+
+  svg2.append("g").attr("id", "x-axis-2").attr("transform", "translate(0,440)");
+  svg2.append("g").attr("id", "y-axis-2").attr("transform", "translate(70,0)");
+
+  svg1.append("text")
+    .attr("x", 360)
+    .attr("y", 480)
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .text("Time (seconds)");
+
+  svg1.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -240)
+    .attr("y", 30)
+    .attr("dy", "-1em")
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .text("VCO₂ / VO₂ (L/min)");
+
+  svg2.append("text")
+    .attr("x", 360)
+    .attr("y", 470)
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .text("Time (seconds)");
+
+  svg2.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -240)
+    .attr("y", 30)
+    .attr("dy", "-1em")
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .text("VE / VCO₂ (L/min)");
+
+  svg1.append("path").attr("id", "vco2-vo2-line").attr("fill", "none").attr("stroke", "white").attr("stroke-width", 3);
+  svg2.append("path").attr("id", "ve-vco2-line").attr("fill", "none").attr("stroke", "white").attr("stroke-width", 3);
+
+  svg1.append("line")
+    .attr("id", "vt1-line")
+    .attr("y1", 40)
+    .attr("y2", 440)
+    .attr("stroke", "green")
+    .attr("stroke-width", 2)
+    .style("display", "none");
+
+  svg2.append("line")
+    .attr("id", "vt2-line")
+    .attr("y1", 40)
+    .attr("y2", 440)
+    .attr("stroke", "red")
+    .attr("stroke-width", 2)
+    .style("display", "none");
+}
+
+function updateThresholdGraphs(currentTime) {
+  const dataSoFar = data
+    .filter(d => d.time <= currentTime)
+    .map(d => ({
+      time: d.time,
+      ratio1: d.VO2_rate !== 0 ? d.CO2_rate / d.O2_rate : 0,
+      ratio2: d.CO2_rate !== 0 ? d.air_rate / d.CO2_rate : 0
+    }));
+
+  const x = d3.scaleLinear()
+    .domain(d3.extent(dataSoFar, d => d.time))
+    .range([70, 680]);
+
+  const y1 = d3.scaleLinear()
+    .domain(d3.extent(dataSoFar, d => d.ratio1))
+    .range([440, 40]);
+
+  const y2 = d3.scaleLinear()
+    .domain(d3.extent(dataSoFar, d => d.ratio2))
+    .range([440, 40]);
+
+  const line1 = d3.line()
+    .x(d => x(d.time))
+    .y(d => y1(d.ratio1));
+
+  const line2 = d3.line()
+    .x(d => x(d.time))
+    .y(d => y2(d.ratio2));
+
+  d3.select("#vco2-vo2-line").datum(dataSoFar).attr("d", line1);
+  d3.select("#ve-vco2-line").datum(dataSoFar).attr("d", line2);
+
+  d3.select("#x-axis-1").call(d3.axisBottom(x).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
+  d3.select("#y-axis-1").call(d3.axisLeft(y1).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
+
+  d3.select("#x-axis-2").call(d3.axisBottom(x).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
+  d3.select("#y-axis-2").call(d3.axisLeft(y2).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
+
+  if (currentTime >= VT1_TIME) {
+    d3.select("#vt1-line")
+      .attr("x1", x(VT1_TIME))
+      .attr("x2", x(VT1_TIME))
+      .style("display", "block");
+  }
+
+  if (currentTime >= VT2_TIME) {
+    d3.select("#vt2-line")
+      .attr("x1", x(VT2_TIME))
+      .attr("x2", x(VT2_TIME))
+      .style("display", "block");
+  }
+}
+
+function updateGraphs(currentTime) {
+  updateThresholdGraphs(currentTime);
+}
+
 function updateFrame() {
-  const currentTime = (step * intervalMs) / 1000 * 10;
+  const currentTime = (step * intervalMs) / 1000 * 50;
   const percent = currentTime / totalTime;
   fill.attr("width", percent * barWidth);
 
@@ -72,35 +218,29 @@ function updateFrame() {
   const seconds = Math.floor(currentTime % 60);
   timeLabel.text(`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
 
-  const closest = data.find(d => Math.floor(d.time) === Math.floor(currentTime));
-  if (closest) {
-    d3.select("#hr").text(closest.HR);
-    d3.select("#o2").text(closest.O2_rate.toFixed(0));
-    d3.select("#co2").text(closest.CO2_rate.toFixed(0));
-    d3.select("#rr").text(closest.RR);
-    d3.select("#ve").text(closest.air_rate.toFixed(1));
-    d3.select("#dist").text(closest.dist_km.toFixed(2));
-  }
+  updateGraphs(currentTime);
 
   if (!vt1Shown && currentTime >= VT1_TIME) {
     vt1Shown = true;
     showThresholdMessage(`
-      🟢 <strong>Aerobic Threshold Reached</strong><br>
-      The body starts producing energy anaerobically.<br>
-      Extra CO₂ is generated from acid buffering.
+      🟢 <strong>VT1 Reached</strong><br>
+      Your body needs more energy than oxygen can provide.<br>
+      It starts using a backup system that creates acid.<br>
+      Your body makes extra CO₂ while trying to neutralize it.
     `);
     return;
   }
-
+  
   if (!vt2Shown && currentTime >= VT2_TIME) {
     vt2Shown = true;
     showThresholdMessage(`
-      🔴 <strong>Anaerobic Threshold Reached</strong><br>
-      Buffering is maxed out. Hyperventilation begins.<br>
-      The body is nearing full exertion.
+      🔴 <strong>VT2 Reached</strong><br>
+      The acid is building up too fast to handle.<br>
+      Your body starts breathing much harder to get rid of CO₂.<br>
+      This helps stop your blood from getting too acidic.
     `);
     return;
-  }
+  }  
 
   if (currentTime >= totalTime) {
     clearInterval(interval);
@@ -136,32 +276,31 @@ document.getElementById("reset-btn").onclick = () => {
   fill.attr("width", 0);
   timeLabel.text("00:00");
 
-  d3.select("#hr").text("--");
-  d3.select("#o2").text("--");
-  d3.select("#co2").text("--");
-  d3.select("#rr").text("--");
-  d3.select("#ve").text("--");
-  d3.select("#dist").text("--");
-
   d3.select("#runner-animated").style("display", "none");
   d3.select("#runner-static").style("display", "block");
-  messageBox.style.display = "none";
+  document.getElementById("threshold-side-message").style.display = "none";
+
+  d3.select("#vt1-line").style("display", "none");
+  d3.select("#vt2-line").style("display", "none");
+
+  updateGraphs(0);
 };
 
 d3.csv(cleanRunnerPath).then(csvData => {
-  data = csvData;
-  data.forEach(d => {
-    d.time = +d.time;
-    d.O2_rate = +d.O2_rate;
-    d.CO2_rate = +d.CO2_rate;
-    d.HR = +d.HR;
-    d.RR = +d.RR;
-    d.air_rate = +d.air_rate;
-    d.dist_km = +d.dist_km;
-    d.Age = +d.Age;
-    d.Weight = +d.Weight;
-    d.Height = +d.Height;
-  });
+  data = csvData.map(d => ({
+    time: +d.time,
+    O2_rate: +d.O2_rate,
+    CO2_rate: +d.CO2_rate,
+    HR: +d.HR,
+    RR: +d.RR,
+    air_rate: +d.air_rate,
+    dist_km: +d.dist_km,
+    Age: +d.Age,
+    Weight: +d.Weight,
+    Height: +d.Height,
+    ID_test: d.ID_test,
+    Sex: d.Sex
+  }));
 
   data.sort((a, b) => a.time - b.time);
   totalTime = d3.max(data, d => d.time);
@@ -173,5 +312,6 @@ d3.csv(cleanRunnerPath).then(csvData => {
   d3.select("#runner-weight").text(info.Weight);
   d3.select("#runner-height").text(info.Height);
 
+  initThresholdGraphs();
   drawThresholdMarkers();
 });
