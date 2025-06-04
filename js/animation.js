@@ -1,14 +1,14 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
-const cleanRunnerPath = "./data/animation/clean_runner_840.csv";
+const cleanRunnerPath = "./data/animation/clean_runner_741_1.csv";
 
 let interval;
 let step = 0;
 let playing = false;
 let totalTime, data;
 
-const VT1_TIME = 187;
-const VT2_TIME = 356;
+const VT1_TIME = 378;
+const VT2_TIME = 705;
 let vt1Shown = false;
 let vt2Shown = false;
 
@@ -84,7 +84,7 @@ function initThresholdGraphs() {
     .attr("text-anchor", "middle")
     .attr("font-size", "20px")
     .attr("fill", "white")
-    .text("VCO₂ vs VO₂");
+    .text("VCO₂ / VO₂ vs Time");
 
   svg2.append("text")
     .attr("x", 360)
@@ -92,46 +92,45 @@ function initThresholdGraphs() {
     .attr("text-anchor", "middle")
     .attr("font-size", "20px")
     .attr("fill", "white")
-    .text("VE vs VCO₂");
+    .text("VE / VCO₂ vs Time");
 
   svg1.append("g").attr("id", "x-axis-1").attr("transform", "translate(0,440)");
-  svg1.append("g").attr("id", "y-axis-1").attr("transform", "translate(50,0)");
+  svg1.append("g").attr("id", "y-axis-1").attr("transform", "translate(70,0)");
 
   svg2.append("g").attr("id", "x-axis-2").attr("transform", "translate(0,440)");
-  svg2.append("g").attr("id", "y-axis-2").attr("transform", "translate(50,0)");
+  svg2.append("g").attr("id", "y-axis-2").attr("transform", "translate(70,0)");
 
-  // Axis labels with spacing fixes
   svg1.append("text")
     .attr("x", 360)
-    .attr("y", 470)
+    .attr("y", 480)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
-    .text("VO₂ (L/min)");
+    .text("Time (seconds)");
 
   svg1.append("text")
     .attr("transform", "rotate(-90)")
     .attr("x", -240)
-    .attr("y", 10)
+    .attr("y", 30)
     .attr("dy", "-1em")
     .attr("text-anchor", "middle")
     .attr("fill", "white")
-    .text("VCO₂ (L/min)");
+    .text("VCO₂ / VO₂ (L/min)");
 
   svg2.append("text")
     .attr("x", 360)
     .attr("y", 470)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
-    .text("VCO₂ (L/min)");
+    .text("Time (seconds)");
 
   svg2.append("text")
     .attr("transform", "rotate(-90)")
     .attr("x", -240)
-    .attr("y", 10)
+    .attr("y", 30)
     .attr("dy", "-1em")
     .attr("text-anchor", "middle")
     .attr("fill", "white")
-    .text("VE (L/min)");
+    .text("VE / VCO₂ (L/min)");
 
   svg1.append("path").attr("id", "vco2-vo2-line").attr("fill", "none").attr("stroke", "white").attr("stroke-width", 3);
   svg2.append("path").attr("id", "ve-vco2-line").attr("fill", "none").attr("stroke", "white").attr("stroke-width", 3);
@@ -154,40 +153,54 @@ function initThresholdGraphs() {
 }
 
 function updateThresholdGraphs(currentTime) {
-  const dataSoFar = data.filter(d => d.time <= currentTime);
+  const dataSoFar = data
+    .filter(d => d.time <= currentTime)
+    .map(d => ({
+      time: d.time,
+      ratio1: d.VO2_rate !== 0 ? d.CO2_rate / d.O2_rate : 0,
+      ratio2: d.CO2_rate !== 0 ? d.air_rate / d.CO2_rate : 0
+    }));
 
-  const x1 = d3.scaleLinear().domain(d3.extent(data, d => d.O2_rate)).range([50, 680]);
-  const y1 = d3.scaleLinear().domain(d3.extent(data, d => d.CO2_rate)).range([440, 40]);
+  const x = d3.scaleLinear()
+    .domain(d3.extent(dataSoFar, d => d.time))
+    .range([70, 680]);
 
-  const x2 = d3.scaleLinear().domain(d3.extent(data, d => d.CO2_rate)).range([50, 680]);
-  const y2 = d3.scaleLinear().domain(d3.extent(data, d => d.air_rate)).range([440, 40]);
+  const y1 = d3.scaleLinear()
+    .domain(d3.extent(dataSoFar, d => d.ratio1))
+    .range([440, 40]);
 
-  const line1 = d3.line().x(d => x1(d.O2_rate)).y(d => y1(d.CO2_rate));
-  const line2 = d3.line().x(d => x2(d.CO2_rate)).y(d => y2(d.air_rate));
+  const y2 = d3.scaleLinear()
+    .domain(d3.extent(dataSoFar, d => d.ratio2))
+    .range([440, 40]);
+
+  const line1 = d3.line()
+    .x(d => x(d.time))
+    .y(d => y1(d.ratio1));
+
+  const line2 = d3.line()
+    .x(d => x(d.time))
+    .y(d => y2(d.ratio2));
 
   d3.select("#vco2-vo2-line").datum(dataSoFar).attr("d", line1);
   d3.select("#ve-vco2-line").datum(dataSoFar).attr("d", line2);
 
-  d3.select("#x-axis-1").call(d3.axisBottom(x1).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
+  d3.select("#x-axis-1").call(d3.axisBottom(x).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
   d3.select("#y-axis-1").call(d3.axisLeft(y1).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
 
-  d3.select("#x-axis-2").call(d3.axisBottom(x2).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
+  d3.select("#x-axis-2").call(d3.axisBottom(x).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
   d3.select("#y-axis-2").call(d3.axisLeft(y2).tickSizeOuter(0)).selectAll("path,line,text").attr("stroke", "white").attr("fill", "white");
 
-  const vt1 = data.find(d => Math.floor(d.time) === VT1_TIME);
-  const vt2 = data.find(d => Math.floor(d.time) === VT2_TIME);
-
-  if (currentTime >= VT1_TIME && vt1) {
+  if (currentTime >= VT1_TIME) {
     d3.select("#vt1-line")
-      .attr("x1", x1(vt1.O2_rate))
-      .attr("x2", x1(vt1.O2_rate))
+      .attr("x1", x(VT1_TIME))
+      .attr("x2", x(VT1_TIME))
       .style("display", "block");
   }
 
-  if (currentTime >= VT2_TIME && vt2) {
+  if (currentTime >= VT2_TIME) {
     d3.select("#vt2-line")
-      .attr("x1", x2(vt2.CO2_rate))
-      .attr("x2", x2(vt2.CO2_rate))
+      .attr("x1", x(VT2_TIME))
+      .attr("x2", x(VT2_TIME))
       .style("display", "block");
   }
 }
