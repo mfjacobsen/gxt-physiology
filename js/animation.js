@@ -210,7 +210,7 @@ function updateGraphs(currentTime) {
 }
 
 function updateFrame() {
-  const currentTime = (step * intervalMs) / 1000 * 10;
+  const currentTime = (step * intervalMs) / 1000 * 50;
   const percent = currentTime / totalTime;
   fill.attr("width", percent * barWidth);
 
