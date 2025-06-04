@@ -6,6 +6,9 @@
     display: flex;
     gap: 16px;
     margin-top: 20px;
+    padding:20px;
+    border: 1px solid #ffffffdd;
+    border-radius: 10px;
 }
 
 .user-input {
@@ -16,27 +19,46 @@
     width: 100%;
     padding: 10px;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid #ffffffdd;
     border-radius: 4px;
     appearance: none;
-    background-color: white;
+    background-color: #ffffffdd;
+    box-shadow: 0 0 10px #1e90ff44;
 }
 
 #units-input {
     flex: 0.3;
 }
 
+#personal-vis-explanation {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
 #personal-vis-content {
-    margin: 20px 0;
+    margin: 0 0;
     display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-evenly;
+    max-width: 1200px;
+    margin: auto auto;
 }
 
 #runners-table {
     flex: 3;
+    margin-left: 30px;
+    min-width: 0;
 }
 
 #runners-bar-plot {
     flex: 5;
+    min-width: 0;
+}
+
+#runners-bar-plot svg {
+    width: 100% !important;
+    height: auto;
 }
 
 #runners-table .d3-table {
@@ -55,4 +77,69 @@
     font-weight: bold;
 }
 
+#runner-threshold-container,
+#threshold-tips {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 20px;
+}
 
+#personal-vis-content,
+#runner-threshold-1,
+#runner-threshold-2,
+.threshold-tips-box {
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 16px;
+}
+
+#runner-threshold-1 .x-axis text,
+#runner-threshold-1 .y-axis text {
+    font-size: 14px;
+    fill: white;
+}
+
+.runner-row-highlight {
+    background-color: #1e90ff44;
+}
+
+#runner-threshold-1 .y-grid line,
+#runner-threshold-2 .y-grid line {
+    stroke: #aaa;
+    stroke-opacity: 0.2;
+    shape-rendering: crispEdges;
+}
+
+#runner-threshold-1 .y-grid path,
+#runner-threshold-2 .y-grid path {
+    display: none;
+}
+
+.threshold-tooltip {
+    position: absolute;
+    padding: 5px 8px;
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+#threshold-tips {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.threshold-tips-box {
+    flex: 1;
+}
+
+.tips-heading {
+    margin-left: 10px;
+}

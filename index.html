@@ -69,6 +69,10 @@
     <div id="personal-vis">
         <h1 id="personal-vis-title"> Explore Runners Similar to You</h1>
         <div id="input-row">
+            <select id="units-input" class="user-input" name="units">
+                <option value="metric">Metric</option>
+                <option value="imperial">Imperial</option>
+            </select>
             <select id="sex-input" class="user-input" name="sex">
                 <option value="" selected>Choose sex...</option>
                 <option value="male">Male</option>
@@ -76,15 +80,37 @@
             </select>
             <input type="text" placeholder="Enter Age ..." id="age-input" class="user-input" />
             <input type="text" placeholder="Enter Height (cm) ..." id="height-input" class="user-input" />
-            <input type="text" placeholder="Enter Weight (kg) ..." id="weight-input" class="user-input" />
-            <select id="units-input" class="user-input" name="units">
-                <option value="metric">Metric</option>
-                <option value="imperial">Imperial</option>
-            </select>
+            <input type="text" placeholder="Enter Weight (kg) ..." id="weight-input" class="user-input" />  
         </div>
+        <h3 id="personal-vis-explanation">Click the bars to select runners, then try identifying their thresholds...</h3>
         <div id="personal-vis-content">
             <div id="runners-table"></div>
             <div id="runners-bar-plot"></div>
+            <div id="runner-tooltip" class="threshold-tooltip" style="display: none;">Select Runner</div>
+        </div>
+        <div id="runner-threshold-container">
+            <div id="runner-threshold-1"></div>
+            <div id="runner-threshold-2"></div>
+            <div id="vt1-tooltip" class="threshold-tooltip" style="display: none;">Select Aerobic Threshold</div>
+            <div id="vt2-tooltip" class="threshold-tooltip" style="display: none;">Select Anaerobic Threshold</div>
+        </div>
+        <div id="threshold-tips">
+            <div id="vt1-tips" class="threshold-tips-box">
+                <h3 class = "tips-heading">Aerobic Threshold Tips</h3>
+                <ul>
+                    <li>Start your search in the first half of the test.</li>
+                    <li>Look for the point where RER starts to increase.</li>
+                    <li>Often occurs 0.8 - 0.9 RER.</li>
+                    
+                </ul>
+            </div>
+            <div id ="vt2-tips" class="threshold-tips-box">
+                <h3 class = "tips-heading">Anaerobic Threshold Tips</h3>
+                <ul>
+                    <li>Start your search in the last third of the test.</li>
+                    <li>Look for the point where VE/VCO2 starts to increase after decreasing or remaining constant</li>
+                </ul>
+            </div>
         </div>
     </div>
 
