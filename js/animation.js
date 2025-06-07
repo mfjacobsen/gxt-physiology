@@ -11,6 +11,9 @@ const VT1_TIME = 378;
 const VT2_TIME = 705;
 let vt1Shown = false;
 let vt2Shown = false;
+let phase1Shown = false;
+let phase2Shown = false;
+let phase3Shown = false;
 
 const barWidth = 600;
 const intervalMs = 10;
@@ -220,27 +223,35 @@ function updateFrame() {
 
   updateGraphs(currentTime);
 
-  if (!vt1Shown && currentTime >= VT1_TIME) {
-    vt1Shown = true;
-    showThresholdMessage(`
-      🟢 <strong>VT1 Reached</strong><br>
-      Your body needs more energy than oxygen can provide.<br>
-      It starts using a backup system that creates acid.<br>
-      Your body makes extra CO₂ while trying to neutralize it.
-    `);
+  if (!phase1Shown && currentTime >= 10 && currentTime < VT1_TIME) {
+    phase1Shown = true;
+    showThresholdMessage(`🟦 <strong>Phase 1: Light Effort</strong><br>You’re warming up. Breathing and heart rate are rising gradually.`);
     return;
   }
-  
+
+  if (vt1Shown && !phase2Shown && currentTime > VT1_TIME + 3 && currentTime < VT2_TIME) {
+    phase2Shown = true;
+    showThresholdMessage(`🟧 <strong>Phase 2: Moderate Effort</strong><br>You're past your first threshold. Breathing is heavier but controlled.`);
+    return;
+  }
+
+  if (vt2Shown && !phase3Shown && currentTime > VT2_TIME + 3) {
+    phase3Shown = true;
+    showThresholdMessage(`🟥 <strong>Phase 3: Intense Effort</strong><br>You’re pushing to your limit. Breathing is sharp and rapid.`);
+    return;
+  }
+
+  if (!vt1Shown && currentTime >= VT1_TIME) {
+    vt1Shown = true;
+    showThresholdMessage(`🟢 <strong>VT1 Reached</strong><br>Your body needs more energy than oxygen can provide.<br>It starts using a backup system that creates acid.<br>Your body makes extra CO₂ while trying to neutralize it.`);
+    return;
+  }
+
   if (!vt2Shown && currentTime >= VT2_TIME) {
     vt2Shown = true;
-    showThresholdMessage(`
-      🔴 <strong>VT2 Reached</strong><br>
-      The acid is building up too fast to handle.<br>
-      Your body starts breathing much harder to get rid of CO₂.<br>
-      This helps stop your blood from getting too acidic.
-    `);
+    showThresholdMessage(`🔴 <strong>VT2 Reached</strong><br>The acid is building up too fast to handle.<br>Your body starts breathing much harder to get rid of CO₂.<br>This helps stop your blood from getting too acidic.`);
     return;
-  }  
+  }
 
   if (currentTime >= totalTime) {
     clearInterval(interval);
@@ -273,17 +284,23 @@ document.getElementById("reset-btn").onclick = () => {
   playing = false;
   vt1Shown = false;
   vt2Shown = false;
+  phase1Shown = false;
+  phase2Shown = false;
+  phase3Shown = false;
   fill.attr("width", 0);
   timeLabel.text("00:00");
 
-  d3.select("#runner-animated").style("display", "none");
-  d3.select("#runner-static").style("display", "block");
+  d3.select("#runner-static").style("display", "none");
+  d3.select("#runner-animated").style("display", "block");
   document.getElementById("threshold-side-message").style.display = "none";
 
   d3.select("#vt1-line").style("display", "none");
   d3.select("#vt2-line").style("display", "none");
 
   updateGraphs(0);
+
+  interval = setInterval(updateFrame, intervalMs);
+  playing = true;
 };
 
 d3.csv(cleanRunnerPath).then(csvData => {
