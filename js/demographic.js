@@ -131,8 +131,8 @@ Promise.all([
   const yLabelMap = {
     'HR':            'Heart Rate (bpm)',
     'RR':            'Respiration Rate (breaths/min)',
-    'CO2_vol':       'CO₂ Volume',
-    'O2_vol':        'O₂ Volume',
+    'CO2_vol':       'CO₂ Volume (mL/min)',
+    'O2_vol':        'O₂ Volume (mL/min)',
     'time_th1':      'Time (min)',
     'time_th2':      'Time (min)',
     'threshold_gap': 'Gap (min)'
@@ -148,6 +148,35 @@ Promise.all([
 
   // initial draw
   update();
+
+    // after your initial `update()` call:
+  setupStoryScroller();
+
+  function setupStoryScroller() {
+    const container = document.querySelector('#story-column');
+    const sections  = Array.from(container.querySelectorAll('.subsection'));
+    container.addEventListener('scroll', () => {
+      const topY = container.getBoundingClientRect().top;
+      // find first subsection whose top is >= container.top + a small offset
+      for (const sec of sections) {
+        const r = sec.getBoundingClientRect();
+        if (r.top >= topY + 10) {
+          const demo   = sec.getAttribute('data-demo');
+          const metric = sec.getAttribute('data-metric');
+          // only update if changed
+          if (selectGroup.property('value') !== demo) {
+            selectGroup.property('value', demo);
+          }
+          if (selectMetric.property('value') !== metric) {
+            selectMetric.property('value', metric);
+          }
+          update();  // redraw with the new combo
+          break;
+        }
+      }
+    });
+  }
+
 
   function update() {
     const field  = selectGroup.property('value');

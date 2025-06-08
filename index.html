@@ -13,9 +13,34 @@
     <script src="./js/animation.js" type="module" defer></script>
     <script src="./js/personal.js" type="module" defer></script>
     <script src="./js/demographic.js" type="module" defer></script>
+    <script src="./js/global.js" type="module" defer></script>
 
 </head>
 <body>
+
+  <style>
+    #reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;               /* thickness */
+    background: rgba(0,0,0,0.1);
+    z-index: 9999;
+  }
+
+  /* the actual progress fill */
+  #reading-progress__bar {
+    height: 100%;
+    width: 0%;
+    background: #1ebafa;        /* pick your accent color */
+    transition: width 0.1s ease-out;
+  }
+  </style>
+  <div id="reading-progress">
+    <div id="reading-progress__bar"></div>
+  </div>
+
 <main>
 
     <br><br><br><br><br><br><br><br><br><br><br><br>
@@ -216,13 +241,223 @@
         </div>
     </div>
 
-    <section id="demographic-section">
-      <h2 id="demographic-title">
-        Physiological Metrics by Demographic &amp; Performance
-      </h2>
+    <!-- <section id="demographic-section"> -->
+      <!-- <h2 id="demographic-title"> -->
+        <!-- Physiological Metrics by Demographic &amp; Performance -->
+      <!-- </h2> -->
       <!-- placeholder for D3 to hook into -->
+      <!-- <div id="demographic-viz-container"></div> -->
+    <!-- </section> -->
+
+    <!-- Replace the commented section with: -->
+
+
+
+
+
+
+    <!-- Add these rules to your CSS (e.g. demographic.css) to get consistent spacing -->
+  <style>
+  /* Container: left narrative, right viz */
+  .scroll-container {
+    display: grid;
+    /* narrow text column so the viz gets more room */
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+  }
+
+  /* Left column should scroll independently */
+  #story-column {
+    display: flex;
+    flex-direction: column;
+    /* add this line: */
+    gap: 2rem;              /* 2rem between each .story-section */
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 1rem;
+    border-right: 1px solid #ddd;
+  }
+
+  /* Each “step” in your story */
+  .story-section {
+    margin-bottom: 2rem;
+  }
+
+  .story-section .subsection {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--color-accent);
+  }
+
+  /* Right column: make the viz stick while you scroll text */
+  #demographic-viz-container {
+    position: sticky;
+    top: 1rem;
+    align-self: start;
+    width: 100%;
+    min-height: 80vh;
+  }
+    .story-section {
+      margin-bottom: 3rem;
+    }
+    .subsection {
+      margin: 2rem 0;
+      padding-left: 1rem;
+      border-left: 3px solid var(--color-accent);
+    }
+  </style>
+
+  <section id="demographic-section">
+
+    
+    <h2 id="demographic-title">
+      Physiological Metrics by Demographic &amp; Performance
+    </h2>
+
+    <div class="scroll-container">
+      <!-- LEFT: narrative steps -->
+      <div id="story-column">
+
+        <!-- AGE GROUP -->
+        <div class="story-section">
+
+          <h3 id="story-heading">Highlights from Selected Demographic Groups</h3>
+
+          <h3>Age Group</h3>
+
+          <div class="subsection"
+             data-demo="age_group"
+             data-metric="time_th1">
+          <h4>Threshold</h4>
+          <p>
+            From the graph, there is no clear trend that one age group
+            takes more time to reach the first ventilatory threshold than
+            the others.
+          </p>
+        </div>
+
+          <div class="subsection"
+              data-demo="age_group"
+              data-metric="threshold_gap">
+            <h4>Threshold Gap</h4>
+            <p>
+              Gap is calculated as time of threshold 2 − time of threshold 1.
+              The longer the gap, the healthier the running (between these two
+              thresholds the body is burning fats). People aged 19–30 tend to
+              have the highest gap across performance levels, while 0–18 and
+              31+ fall behind.
+            </p>
+          </div>
+
+          <div class="subsection"
+              data-demo="age_group"
+              data-metric="HR">
+            <h4>Heart Rate</h4>
+            <p>
+              The older the participants get, the lower their average heart rate.
+              Across all performance bins, 0–18 year-olds have the highest HR,
+              19–30 are in the middle, and 31+ are the lowest.
+            </p>
+          </div>
+
+          <div class="subsection"
+              data-demo="age_group"
+              data-metric="O2_vol">
+            <h4>O₂ Volume</h4>
+            <p>
+              Older groups consistently consume more oxygen. 0–18 year-olds
+              always stay below ~61.5 mL/min, whereas 19+ groups reach ~70 mL/min
+              in most performance bins.
+            </p>
+          </div>
+        </div>
+
+        <!-- BMI GROUP -->
+        <div class="story-section">
+          <h3>BMI Group</h3>
+
+          <div class="subsection"
+              data-demo="bmi_group"
+              data-metric="time_th1">
+            <h4>Threshold</h4>
+            <p>
+              From the graph, underweight runners tend to take longer to hit
+              the first threshold at higher performance levels, while lower
+              performers reach it at roughly the same time.
+            </p>
+          </div>
+
+          <div class="subsection"
+              data-demo="bmi_group"
+              data-metric="RR">
+            <h4>Respiration Rate</h4>
+            <p>
+              Underweight participants always show the highest respiration rate
+              (≥ 43 breaths/min). Normal and overweight groups are similar,
+              but never exceed ~40 breaths/min.
+            </p>
+          </div>
+
+          <div class="subsection"
+              data-demo="bmi_group"
+              data-metric="CO2_vol">
+            <h4>CO₂ Volume</h4>
+            <p>
+              Heavier groups produce more CO₂. Overweight individuals top the
+              chart, followed by normal weight, then underweight.
+            </p>
+          </div>
+        </div>
+
+        <!-- SEX -->
+        <div class="story-section">
+          <h3>Sex</h3>
+
+          <div class="subsection"
+              data-demo="sex"
+              data-metric="time_th2">
+            <h4>Threshold</h4>
+            <p>
+              VT2 occurs at roughly the same time for both sexes, indicating
+              similar endurance capacity before anaerobic metabolism kicks in.
+            </p>
+          </div>
+
+          <div class="subsection"
+              data-demo="sex"
+              data-metric="O2_vol">
+            <h4>O₂ Volume</h4>
+            <p>
+              Males consistently take in more oxygen (~72–73 mL/min) than
+              females (< 60 mL/min) across all performance bins.
+            </p>
+          </div> 
+        </div>
+
+        <div class="story-section">
+          <h3>Conclusion</h3>
+          <div class="subsection">
+            <p>
+              Throughout our journey you’ve seen how <strong>age</strong>, <strong>BMI</strong>, and <strong>sex</strong>
+              each shape your physiological response to graded exercise. Younger runners spike their heart rate highest, 
+              19–30-year-olds hold the widest healthy “gap” between thresholds, underweight folks breathe fastest, 
+              and heavier groups produce more CO₂. While males take in more oxygen on average, both sexes cross their 
+              second threshold at almost the same point.
+            </p>
+            <p>
+              These insights remind us that there’s no one-size-fits-all in training, knowing your own demographics 
+              and performance bracket can help you tailor workouts for safer, more effective progress.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: the sticky D3 hook -->
       <div id="demographic-viz-container"></div>
-    </section>
+    </div>
+  </section>
+
 
 
     <br><br><br><br><br><br><br><br><br><br><br><br>
