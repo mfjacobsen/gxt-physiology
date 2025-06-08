@@ -155,3 +155,16 @@ body {
   margin-bottom: 10px;
   color: white;
 }
+.threshold-intro {
+  width: 100%;
+  max-width: 500px; 
+  margin-top: 20px;
+  margin-left: 0;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #1a1a1a;
+  border-left: 4px solid #4CAF50;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.6;
+}

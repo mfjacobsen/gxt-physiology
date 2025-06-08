@@ -11,6 +11,9 @@ const VT1_TIME = 378;
 const VT2_TIME = 705;
 let vt1Shown = false;
 let vt2Shown = false;
+let phase1Shown = false;
+let phase2Shown = false;
+let phase3Shown = false;
 
 const barWidth = 600;
 const intervalMs = 10;
@@ -63,23 +66,23 @@ function drawThresholdMarkers() {
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "4 2");
 }
-
 function initThresholdGraphs() {
   const svg1 = d3.select("#threshold-graph-1").append("svg")
-    .attr("width", 720)
-    .attr("height", 480)
-    .style("background", "black")
-    .style("margin-right", "10px");
+    .attr("viewBox", "0 0 880 560")
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto")
+    .style("background", "black");
 
-  const svg2 = d3.select("#threshold-graph-2")
-    .style("margin-left", "-120px")
-    .append("svg")
-    .attr("width", 720)
-    .attr("height", 480)
+  const svg2 = d3.select("#threshold-graph-2").append("svg")
+    .attr("viewBox", "0 0 880 560")
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto")
     .style("background", "black");
 
   svg1.append("text")
-    .attr("x", 360)
+    .attr("x", 440)
     .attr("y", 30)
     .attr("text-anchor", "middle")
     .attr("font-size", "20px")
@@ -87,29 +90,29 @@ function initThresholdGraphs() {
     .text("VCO₂ / VO₂ vs Time");
 
   svg2.append("text")
-    .attr("x", 360)
+    .attr("x", 440)
     .attr("y", 30)
     .attr("text-anchor", "middle")
     .attr("font-size", "20px")
     .attr("fill", "white")
     .text("VE / VCO₂ vs Time");
 
-  svg1.append("g").attr("id", "x-axis-1").attr("transform", "translate(0,440)");
+  svg1.append("g").attr("id", "x-axis-1").attr("transform", "translate(0,480)");
   svg1.append("g").attr("id", "y-axis-1").attr("transform", "translate(70,0)");
 
-  svg2.append("g").attr("id", "x-axis-2").attr("transform", "translate(0,440)");
+  svg2.append("g").attr("id", "x-axis-2").attr("transform", "translate(0,480)");
   svg2.append("g").attr("id", "y-axis-2").attr("transform", "translate(70,0)");
 
   svg1.append("text")
-    .attr("x", 360)
-    .attr("y", 480)
+    .attr("x", 440)
+    .attr("y", 540)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("Time (seconds)");
 
   svg1.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("x", -240)
+    .attr("x", -270)
     .attr("y", 30)
     .attr("dy", "-1em")
     .attr("text-anchor", "middle")
@@ -117,15 +120,15 @@ function initThresholdGraphs() {
     .text("VCO₂ / VO₂ (L/min)");
 
   svg2.append("text")
-    .attr("x", 360)
-    .attr("y", 470)
+    .attr("x", 440)
+    .attr("y", 540)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("Time (seconds)");
 
   svg2.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("x", -240)
+    .attr("x", -270)
     .attr("y", 30)
     .attr("dy", "-1em")
     .attr("text-anchor", "middle")
@@ -138,7 +141,7 @@ function initThresholdGraphs() {
   svg1.append("line")
     .attr("id", "vt1-line")
     .attr("y1", 40)
-    .attr("y2", 440)
+    .attr("y2", 480)
     .attr("stroke", "green")
     .attr("stroke-width", 2)
     .style("display", "none");
@@ -146,11 +149,13 @@ function initThresholdGraphs() {
   svg2.append("line")
     .attr("id", "vt2-line")
     .attr("y1", 40)
-    .attr("y2", 440)
+    .attr("y2", 480)
     .attr("stroke", "red")
     .attr("stroke-width", 2)
     .style("display", "none");
 }
+
+
 
 function updateThresholdGraphs(currentTime) {
   const dataSoFar = data
@@ -220,27 +225,35 @@ function updateFrame() {
 
   updateGraphs(currentTime);
 
-  if (!vt1Shown && currentTime >= VT1_TIME) {
-    vt1Shown = true;
-    showThresholdMessage(`
-      🟢 <strong>VT1 Reached</strong><br>
-      Your body needs more energy than oxygen can provide.<br>
-      It starts using a backup system that creates acid.<br>
-      Your body makes extra CO₂ while trying to neutralize it.
-    `);
+  if (!phase1Shown && currentTime >= 10 && currentTime < VT1_TIME) {
+    phase1Shown = true;
+    showThresholdMessage(`🟦 <strong>Phase 1: Light Effort</strong><br>You’re warming up. Breathing and heart rate are rising gradually.`);
     return;
   }
-  
+
+  if (vt1Shown && !phase2Shown && currentTime > VT1_TIME + 3 && currentTime < VT2_TIME) {
+    phase2Shown = true;
+    showThresholdMessage(`🟧 <strong>Phase 2: Moderate Effort</strong><br>You're past your first threshold. Breathing is heavier but controlled.`);
+    return;
+  }
+
+  if (vt2Shown && !phase3Shown && currentTime > VT2_TIME + 3) {
+    phase3Shown = true;
+    showThresholdMessage(`🟥 <strong>Phase 3: Intense Effort</strong><br>You’re pushing to your limit. Breathing is sharp and rapid.`);
+    return;
+  }
+
+  if (!vt1Shown && currentTime >= VT1_TIME) {
+    vt1Shown = true;
+    showThresholdMessage(`🟢 <strong>VT1 Reached</strong><br>Your body needs more energy than oxygen can provide.<br>It starts using a backup system that creates acid.<br>Your body makes extra CO₂ while trying to neutralize it.`);
+    return;
+  }
+
   if (!vt2Shown && currentTime >= VT2_TIME) {
     vt2Shown = true;
-    showThresholdMessage(`
-      🔴 <strong>VT2 Reached</strong><br>
-      The acid is building up too fast to handle.<br>
-      Your body starts breathing much harder to get rid of CO₂.<br>
-      This helps stop your blood from getting too acidic.
-    `);
+    showThresholdMessage(`🔴 <strong>VT2 Reached</strong><br>The acid is building up too fast to handle.<br>Your body starts breathing much harder to get rid of CO₂.<br>This helps stop your blood from getting too acidic.`);
     return;
-  }  
+  }
 
   if (currentTime >= totalTime) {
     clearInterval(interval);
@@ -273,17 +286,23 @@ document.getElementById("reset-btn").onclick = () => {
   playing = false;
   vt1Shown = false;
   vt2Shown = false;
+  phase1Shown = false;
+  phase2Shown = false;
+  phase3Shown = false;
   fill.attr("width", 0);
   timeLabel.text("00:00");
 
-  d3.select("#runner-animated").style("display", "none");
-  d3.select("#runner-static").style("display", "block");
+  d3.select("#runner-static").style("display", "none");
+  d3.select("#runner-animated").style("display", "block");
   document.getElementById("threshold-side-message").style.display = "none";
 
   d3.select("#vt1-line").style("display", "none");
   d3.select("#vt2-line").style("display", "none");
 
   updateGraphs(0);
+
+  interval = setInterval(updateFrame, intervalMs);
+  playing = true;
 };
 
 d3.csv(cleanRunnerPath).then(csvData => {

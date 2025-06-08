@@ -43,57 +43,88 @@
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-    <div class="container">
+
+<!-- MAIN CONTAINER -->
+<div class="container">
     <div class="visual">
+      <div class="top-section">
         <div class="runner-row">
-        <div class="runner-img-wrapper">
-            <img id="runner-static" src="pictures/static_runner.png" class="runner-img">
-            <img id="runner-animated" src="pictures/runner.gif" class="runner-img" style="display: none;">
-        </div>
+        
+          <!-- LEFT COLUMN -->
+          <div class="left-column">
 
-        <div class="runner-info info-box">
-            <h2>Runner Info</h2>
-            <p><strong>ID:</strong> <span id="runner-id">--</span></p>
-            <p><strong>Age:</strong> <span id="runner-age">--</span></p>
-            <p><strong>Sex:</strong> <span id="runner-sex">--</span></p>
-            <p><strong>Weight:</strong> <span id="runner-weight">--</span> kg</p>
-            <p><strong>Height:</strong> <span id="runner-height">--</span> cm</p>
+        
+            <!-- Image + Info -->
+            <div style="display: flex; align-items: flex-start; gap: 20px;">
+              <div class="runner-img-wrapper">
+                <img id="runner-static" src="pictures/static_runner.png" class="runner-img">
+                <img id="runner-animated" src="pictures/runner.gif" class="runner-img" style="display: none;">
+              </div>
+  
+              <div class="runner-info info-box">
+                <h2>Runner Info</h2>
+                <p><strong>ID:</strong> <span id="runner-id">--</span></p>
+                <p><strong>Age:</strong> <span id="runner-age">--</span></p>
+                <p><strong>Sex:</strong> <span id="runner-sex">--</span></p>
+                <p><strong>Weight:</strong> <span id="runner-weight">--</span> kg</p>
+                <p><strong>Height:</strong> <span id="runner-height">--</span> cm</p>
+              </div>
+            </div>
+  
+            <!-- Time Elapsed Bar -->
+            <div class="bar-section">
+              <div class="timer-label"><strong>Time Elapsed:</strong> <span id="time-label">00:00</span></div>
+              <svg width="600" height="40">
+                <rect class="bar-bg" x="0" y="5" width="600" height="30" rx="5" ry="5"></rect>
+                <rect class="bar-fill" x="0" y="5" width="0" height="30" rx="5" ry="5"></rect>
+              </svg>
+            </div>
+  
+            <!-- Controls -->
+            <div class="controls">
+              <button id="play-btn">▶ Play</button>
+              <button id="pause-btn">⏸ Pause</button>
+              <button id="reset-btn">⟳ Reset</button>
+            </div>
+  
+            <!-- Threshold Popup -->
+            <div id="threshold-side-message" class="info-box" style="display: none; width: 500px;">
+              <div id="threshold-text"></div>
+              <button id="continue-btn">Continue</button>
+            </div>
+  
+            <!-- Plot Explanation Box -->
+            <div class="threshold-intro info-box" style="width: 950px;">
+                <h2>Why Are We Showing These Two Plots?</h2>
+                <p>These graphs show how your breathing and gas exchange change as you run harder.</p>
+                <p>As exercise intensity increases, your body shifts how it produces and clears energy.</p>
+                <p>A spike in <strong>VCO₂ / VO₂</strong> means your body is starting to rely more on anaerobic metabolism. This is known as the first ventilatory threshold (VT1).</p>
+                <p>A spike in <strong>VE / VCO₂</strong> means your breathing rate sharply increases to remove excess CO₂. This marks the second ventilatory threshold (VT2), when acid builds up too fast to buffer.</p>
+                <p>During the simulation, we’ll pause at each threshold to explain what’s happening inside your body.</p>
+              </div>
+              
+          </div>
+  
+          <!-- RIGHT COLUMN: GRAPHS -->
+          <div class="graph-column">
+            <div id="threshold-graph-1" class="threshold-graph-box">
+              <h3>FIRST THRESHOLD</h3>
+              <!-- Graph content -->
+            </div>
+            <div id="threshold-graph-2" class="threshold-graph-box">
+              <h3>SECOND THRESHOLD</h3>
+              <!-- Graph content -->
+            </div>
+          </div>
+  
         </div>
-
-        <!-- New threshold side message box -->
-        <div id="threshold-side-message" class="info-box" style="display: none; background: #222; color: white; padding: 16px; border-radius: 8px; width: 250px; margin-left: 40px;">
-            <div id="threshold-text"></div>
-            <button id="continue-btn" style="margin-top: 10px; padding: 6px 12px; font-size: 14px; cursor: pointer;">Continue</button>
-        </div>
-        </div>
-
-        <div class="bar-section">
-        <div class="timer-label"><strong>Time Elapsed:</strong> <span id="time-label">00:00</span></div>
-        <svg width="600" height="40">
-            <rect class="bar-bg" x="0" y="5" width="600" height="30" rx="5" ry="5"></rect>
-            <rect class="bar-fill" x="0" y="5" width="0" height="30" rx="5" ry="5"></rect>
-        </svg>
-        </div>
-
-        <div class="controls">
-        <button id="play-btn">▶ Play</button>
-        <button id="pause-btn">⏸ Pause</button>
-        <button id="reset-btn">⟳ Reset</button>
-        </div>
-
-        <!-- Threshold Graphs -->
-        <div class="threshold-graph-row">
-        <div id="threshold-graph-1" class="threshold-graph-box">
-            <h3>FIRST THRESHOLD</h3>
-        </div>
-        <div id="threshold-graph-2" class="threshold-graph-box">
-            <h3>SECOND THRESHOLD</h3>
-        </div>
-        </div>
+      </div>
     </div>
-
-
-    </div>
+  </div>
+  
+    
+      
+      
 
 
     <br><br><br><br><br><br><br><br><br><br><br><br>
@@ -184,6 +215,15 @@
             </div>
         </div>
     </div>
+
+    <section id="demographic-section">
+      <h2 id="demographic-title">
+        Physiological Metrics by Demographic &amp; Performance
+      </h2>
+      <!-- placeholder for D3 to hook into -->
+      <div id="demographic-viz-container"></div>
+    </section>
+
 
     <br><br><br><br><br><br><br><br><br><br><br><br>
 
