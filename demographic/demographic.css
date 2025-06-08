@@ -1,61 +1,98 @@
-/* Huize's Viz Styles */
-/* Container & positioning */
+:root {
+  /* Harmonious pastel on black */
+  --col1: #6baed6;
+  --col2: #fd8d3c;
+  --col3: #74c476;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+}
+
+#viz-title {
+  text-align: center;
+  margin: 16px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
 #demographic-viz-container {
-  font-family: sans-serif;
-  background: #fafafa;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   position: relative;
+  padding: 10px 20px 20px;
 }
 
-/* Dropdown controls */
-#demo-select {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #fff;
-  cursor: pointer;
+.control-label {
+  color: #ddd;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.control-select {
+  background: #222;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 2px 6px;
+  margin-right: 12px;
+  font-size: 14px;
 }
 
-/* Axes */
-.axis path,
-.axis line {
-  stroke: #ccc;
+#demographic-viz-container svg {
+  background-color: #000;
 }
-.axis text {
+
+/* Title & axis labels */
+.chart-title {
+  fill: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+.x-axis-label,
+.y-axis-label {
+  fill: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Axes and gridlines */
+.x-axis path,
+.x-axis line,
+.y-axis path,
+.y-axis line {
+  stroke: #444;
+  stroke-dasharray: 2 2;
+}
+.x-axis text,
+.y-axis text {
+  fill: #ccc;
   font-size: 12px;
-  fill: #333;
-}
-.axis-label {
-  font-size: 13px;
-  font-weight: bold;
-  fill: #333;
-}
-
-/* Lines */
-.line {
-  fill: none;
-  stroke-width: 2px;
 }
 
 /* Legend */
 .legend text {
+  fill: #fff;
   font-size: 12px;
-  fill: #333;
-}
-.legend rect {
-  stroke: #666;
 }
 
+/* Dots hover effect */
+.dot-group circle {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.dot-group circle:hover {
+  transform: scale(1.3);
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+/* Tooltip */
 .tooltip {
   position: absolute;
-  background: rgba(255,255,255,0.9);
-  border: 1px solid #999;
+  display: none;
+  background: rgba(30, 30, 30, 0.9);
+  color: #fff;
   padding: 6px 8px;
+  border-radius: 4px;
   pointer-events: none;
   font-size: 12px;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
 }
-
-/* Huize's Viz Styles Ends*/
