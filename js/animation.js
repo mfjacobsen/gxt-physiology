@@ -66,23 +66,23 @@ function drawThresholdMarkers() {
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "4 2");
 }
-
 function initThresholdGraphs() {
   const svg1 = d3.select("#threshold-graph-1").append("svg")
-    .attr("width", 720)
-    .attr("height", 480)
-    .style("background", "black")
-    .style("margin-right", "10px");
+    .attr("viewBox", "0 0 880 560")
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto")
+    .style("background", "black");
 
-  const svg2 = d3.select("#threshold-graph-2")
-    .style("margin-left", "-120px")
-    .append("svg")
-    .attr("width", 720)
-    .attr("height", 480)
+  const svg2 = d3.select("#threshold-graph-2").append("svg")
+    .attr("viewBox", "0 0 880 560")
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto")
     .style("background", "black");
 
   svg1.append("text")
-    .attr("x", 360)
+    .attr("x", 440)
     .attr("y", 30)
     .attr("text-anchor", "middle")
     .attr("font-size", "20px")
@@ -90,29 +90,29 @@ function initThresholdGraphs() {
     .text("VCO₂ / VO₂ vs Time");
 
   svg2.append("text")
-    .attr("x", 360)
+    .attr("x", 440)
     .attr("y", 30)
     .attr("text-anchor", "middle")
     .attr("font-size", "20px")
     .attr("fill", "white")
     .text("VE / VCO₂ vs Time");
 
-  svg1.append("g").attr("id", "x-axis-1").attr("transform", "translate(0,440)");
+  svg1.append("g").attr("id", "x-axis-1").attr("transform", "translate(0,480)");
   svg1.append("g").attr("id", "y-axis-1").attr("transform", "translate(70,0)");
 
-  svg2.append("g").attr("id", "x-axis-2").attr("transform", "translate(0,440)");
+  svg2.append("g").attr("id", "x-axis-2").attr("transform", "translate(0,480)");
   svg2.append("g").attr("id", "y-axis-2").attr("transform", "translate(70,0)");
 
   svg1.append("text")
-    .attr("x", 360)
-    .attr("y", 480)
+    .attr("x", 440)
+    .attr("y", 540)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("Time (seconds)");
 
   svg1.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("x", -240)
+    .attr("x", -270)
     .attr("y", 30)
     .attr("dy", "-1em")
     .attr("text-anchor", "middle")
@@ -120,15 +120,15 @@ function initThresholdGraphs() {
     .text("VCO₂ / VO₂ (L/min)");
 
   svg2.append("text")
-    .attr("x", 360)
-    .attr("y", 470)
+    .attr("x", 440)
+    .attr("y", 540)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("Time (seconds)");
 
   svg2.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("x", -240)
+    .attr("x", -270)
     .attr("y", 30)
     .attr("dy", "-1em")
     .attr("text-anchor", "middle")
@@ -141,7 +141,7 @@ function initThresholdGraphs() {
   svg1.append("line")
     .attr("id", "vt1-line")
     .attr("y1", 40)
-    .attr("y2", 440)
+    .attr("y2", 480)
     .attr("stroke", "green")
     .attr("stroke-width", 2)
     .style("display", "none");
@@ -149,11 +149,13 @@ function initThresholdGraphs() {
   svg2.append("line")
     .attr("id", "vt2-line")
     .attr("y1", 40)
-    .attr("y2", 440)
+    .attr("y2", 480)
     .attr("stroke", "red")
     .attr("stroke-width", 2)
     .style("display", "none");
 }
+
+
 
 function updateThresholdGraphs(currentTime) {
   const dataSoFar = data

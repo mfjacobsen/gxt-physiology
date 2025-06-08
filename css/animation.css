@@ -6,26 +6,26 @@ body {
 }
 
 .container {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .visual {
-  flex-grow: 1;
+  width: 100%;
 }
 
 .runner-row {
   display: flex;
   align-items: flex-start;
   gap: 30px;
-  margin-bottom: 30px; /* Increased margin to create space */
+  margin-bottom: 30px;
 }
 
 .runner-img-wrapper {
-  width: 280px;
-  height: 280px;
-  flex-shrink: 0; /* Prevent shrinking */
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
 }
 
 .runner-img {
@@ -35,18 +35,26 @@ body {
   display: block;
 }
 
-/* Updated bar section to be full width and positioned correctly */
+.runner-info {
+  background: #222;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 240px;
+  flex-shrink: 0;
+}
+
 .bar-section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 20px;
   width: 100%;
-  max-width: 600px; /* Constrain width */
+  max-width: 600px;
 }
 
 .timer-label {
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 6px;
 }
 
@@ -90,20 +98,9 @@ body {
   background: #222;
   padding: 20px;
   border-radius: 8px;
-  width: 240px;
-  flex-shrink: 0; /* Prevent shrinking */
+  flex-shrink: 0;
 }
 
-/* Right-side stack styling */
-.right-side-stack {
-  min-height: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex: 1; /* Allow it to take remaining space */
-}
-
-/* Full-width threshold popup below intro */
 #threshold-side-message {
   background: #222;
   color: white;
@@ -112,15 +109,15 @@ body {
   width: 100%;
   border: 2px solid #4CAF50;
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   margin-top: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 #threshold-text {
   margin-bottom: 10px;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 #continue-btn {
@@ -137,18 +134,39 @@ body {
   background-color: #45a049;
 }
 
-.threshold-graph-row {
+.threshold-intro {
+  max-width: 400px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #1a1a1a;
+  border-left: 4px solid #4CAF50;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.threshold-intro h2 {
+  color: #4CAF50;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* ✅ Graph container and box alignment fix */
+.graph-column {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 40px;
+  flex-direction: column;
+  gap: 20px;
+  width: 560px;            /* lock column width */
 }
 
 .threshold-graph-box {
   background: black;
   padding: 10px;
-  width: 600px; 
   color: white;
+  border-radius: 8px;
+  width: 100%;             /* match .graph-column */
+  margin: 0;
 }
 
 .threshold-graph-box h3 {
@@ -157,22 +175,33 @@ body {
   margin-bottom: 10px;
   color: white;
 }
-
-/* Intro section before popup */
-.threshold-intro {
-  max-width: 840px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 20px;
-  background: #1a1a1a;
-  border-left: 4px solid #4CAF50;
-  border-radius: 8px;
-  font-size: 16px;
-  line-height: 1.6;
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 600px; /* 🔒 lock width to match explanation and chart */
 }
 
-.threshold-intro h2 {
-  color: #4CAF50;
-  font-size: 18px;
-  margin-bottom: 10px;
+.graph-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 560px; /* 🔒 match graph width */
+}
+
+.threshold-graph-box {
+  background: black;
+  padding: 10px;
+  color: white;
+  border-radius: 8px;
+  width: 100%;
+  margin: 0;
+}
+
+.threshold-graph-box svg {
+  max-width: 540px;  /* set this to your desired shrink size */
+  width: 100%;
+  height: auto;
+  display: block;
 }
