@@ -19,12 +19,13 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 30px; /* Increased margin to create space */
 }
 
 .runner-img-wrapper {
   width: 280px;
   height: 280px;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .runner-img {
@@ -34,11 +35,14 @@ body {
   display: block;
 }
 
+/* Updated bar section to be full width and positioned correctly */
 .bar-section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px; /* Constrain width */
 }
 
 .timer-label {
@@ -52,6 +56,10 @@ body {
 
 .bar-fill {
   fill: #4CAF50;
+}
+
+.controls {
+  margin-bottom: 20px;
 }
 
 .controls button {
@@ -83,40 +91,31 @@ body {
   padding: 20px;
   border-radius: 8px;
   width: 240px;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
-/* Old popup — unused now but you can keep for fallback */
-.threshold-box {
-  position: fixed;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #222;
-  color: #fff;
-  border: 2px solid #4CAF50;
-  border-radius: 10px;
-  padding: 20px 30px;
-  font-size: 18px;
-  text-align: center;
-  z-index: 999;
-  max-width: 500px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+/* Right-side stack styling */
+.right-side-stack {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1; /* Allow it to take remaining space */
 }
 
-/* NEW: Side threshold message box */
+/* Full-width threshold popup below intro */
 #threshold-side-message {
   background: #222;
   color: white;
-  padding: 16px 20px;
+  padding: 20px;
   border-radius: 8px;
   width: 100%;
-  max-width: 840px;
-  margin-left: 10px;
-  margin-top: 70px;
   border: 2px solid #4CAF50;
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
-  font-size: 15px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 #threshold-text {
@@ -125,7 +124,7 @@ body {
 }
 
 #continue-btn {
-  padding: 6px 12px;
+  padding: 8px 16px;
   font-size: 14px;
   background-color: #4CAF50;
   color: white;
@@ -148,7 +147,7 @@ body {
 .threshold-graph-box {
   background: black;
   padding: 10px;
-  width: 720px;
+  width: 600px; 
   color: white;
 }
 
@@ -157,4 +156,23 @@ body {
   text-align: center;
   margin-bottom: 10px;
   color: white;
+}
+
+/* Intro section before popup */
+.threshold-intro {
+  max-width: 840px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #1a1a1a;
+  border-left: 4px solid #4CAF50;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.threshold-intro h2 {
+  color: #4CAF50;
+  font-size: 18px;
+  margin-bottom: 10px;
 }

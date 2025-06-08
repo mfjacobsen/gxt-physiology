@@ -44,56 +44,86 @@
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
     <div class="container">
-    <div class="visual">
-        <div class="runner-row">
-        <div class="runner-img-wrapper">
-            <img id="runner-static" src="pictures/static_runner.png" class="runner-img">
-            <img id="runner-animated" src="pictures/runner.gif" class="runner-img" style="display: none;">
-        </div>
-
-        <div class="runner-info info-box">
-            <h2>Runner Info</h2>
-            <p><strong>ID:</strong> <span id="runner-id">--</span></p>
-            <p><strong>Age:</strong> <span id="runner-age">--</span></p>
-            <p><strong>Sex:</strong> <span id="runner-sex">--</span></p>
-            <p><strong>Weight:</strong> <span id="runner-weight">--</span> kg</p>
-            <p><strong>Height:</strong> <span id="runner-height">--</span> cm</p>
-        </div>
-
-        <!-- New threshold side message box -->
-        <div id="threshold-side-message" class="info-box" style="display: none; background: #222; color: white; padding: 16px; border-radius: 8px; width: 650px; margin-left: 40px;">
-            <div id="threshold-text"></div>
-            <button id="continue-btn" style="margin-top: 10px; padding: 6px 12px; font-size: 14px; cursor: pointer;">Continue</button>
-        </div>
-        </div>
-
-        <div class="bar-section">
-        <div class="timer-label"><strong>Time Elapsed:</strong> <span id="time-label">00:00</span></div>
-        <svg width="600" height="40">
-            <rect class="bar-bg" x="0" y="5" width="600" height="30" rx="5" ry="5"></rect>
-            <rect class="bar-fill" x="0" y="5" width="0" height="30" rx="5" ry="5"></rect>
-        </svg>
-        </div>
-
-        <div class="controls">
-        <button id="play-btn">▶ Play</button>
-        <button id="pause-btn">⏸ Pause</button>
-        <button id="reset-btn">⟳ Reset</button>
-        </div>
-
-            <!-- Threshold Graphs -->
-            <div class="threshold-graph-row">
+        <div class="visual">
+          <!-- Top section with runner image and info -->
+          <div class="top-section">
+            <div class="runner-row" style="display: flex; align-items: flex-start; gap: 30px;">
+      
+              <!-- LEFT COLUMN: image, info, timer, controls -->
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px;">
+      
+                <!-- Image and Info Side-by-Side -->
+                <div style="display: flex; align-items: flex-start; gap: 20px;">
+                  <!-- Runner Image -->
+                  <div class="runner-img-wrapper" style="width: 200px; height: 200px;">
+                    <img id="runner-static" src="pictures/static_runner.png" class="runner-img" style="width: 100%; height: 100%; object-fit: contain;">
+                    <img id="runner-animated" src="pictures/runner.gif" class="runner-img" style="width: 100%; height: 100%; object-fit: contain; display: none;">
+                  </div>
+      
+                  <!-- Runner Info -->
+                  <div class="runner-info info-box" style="font-size: 14px; padding: 10px 14px; background: #222; border-radius: 8px;">
+                    <h2 style="font-size: 18px;">Runner Info</h2>
+                    <p><strong>ID:</strong> <span id="runner-id">--</span></p>
+                    <p><strong>Age:</strong> <span id="runner-age">--</span></p>
+                    <p><strong>Sex:</strong> <span id="runner-sex">--</span></p>
+                    <p><strong>Weight:</strong> <span id="runner-weight">--</span> kg</p>
+                    <p><strong>Height:</strong> <span id="runner-height">--</span> cm</p>
+                  </div>
+                </div>
+      
+                <!-- Timer -->
+                <div class="bar-section">
+                  <div class="timer-label"><strong>Time Elapsed:</strong> <span id="time-label">00:00</span></div>
+                  <svg width="600" height="40">
+                    <rect class="bar-bg" x="0" y="5" width="600" height="30" rx="5" ry="5"></rect>
+                    <rect class="bar-fill" x="0" y="5" width="0" height="30" rx="5" ry="5"></rect>
+                  </svg>
+                </div>
+      
+                <!-- Controls -->
+                <div class="controls">
+                  <button id="play-btn">▶ Play</button>
+                  <button id="pause-btn">⏸ Pause</button>
+                  <button id="reset-btn">⟳ Reset</button>
+                </div>
+              </div>
+      
+              <!-- RIGHT COLUMN: popup + explanation -->
+              <div class="right-side-stack" style="min-height: 250px; display: flex; flex-direction: column; justify-content: flex-start;">
+                <div id="threshold-side-message" class="info-box" style="display: none; background: #222; color: white; padding: 16px; border-radius: 8px; width: 850px; margin-left: 0;">
+                  <div id="threshold-text"></div>
+                  <button id="continue-btn" style="margin-top: 10px; padding: 6px 12px; font-size: 14px; cursor: pointer;">Continue</button>
+                </div>
+      
+                <div class="threshold-intro" style="background: #222; color: white; padding: 16px; border-radius: 8px;">
+                  <h2>Why Are We Showing These Two Plots?</h2>
+                  <p>
+                    When you run harder, your body has to work more to keep up with the energy demand. These two graphs help us figure out when your body starts to struggle.
+                  </p>
+                  <p>
+                    The <strong>first graph (VCO₂ / VO₂)</strong> shows how much carbon dioxide you're producing compared to how much oxygen you're using. A sharp rise tells us your body is switching to backup energy systems. This is the <strong>first threshold (VT1)</strong>.
+                  </p>
+                  <p>
+                    The <strong>second graph (VE / VCO₂)</strong> shows how much you're breathing compared to how much CO₂ you're making. A sharp rise here tells us your body is really trying to get rid of acid. This is the <strong>second threshold (VT2)</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Threshold Graphs Below -->
+          <div class="threshold-graph-row">
             <div id="threshold-graph-1" class="threshold-graph-box">
-                <h3>FIRST THRESHOLD</h3>
+              <h3>FIRST THRESHOLD</h3>
             </div>
             <div id="threshold-graph-2" class="threshold-graph-box">
-                <h3>SECOND THRESHOLD</h3>
+              <h3>SECOND THRESHOLD</h3>
             </div>
-            </div>
-    </div>
-
-
-    </div>
+          </div>
+        </div>
+      </div>
+      
+      
 
 
     <br><br><br><br><br><br><br><br><br><br><br><br>
