@@ -98,6 +98,38 @@
 
     <br><br><br><br><br><br><br><br><br><br><br><br>
 
+    <div id="identifying-container">
+        <h1 id="identifying-title">How to Identify the Thresholds</h1>
+        <div id="identifying-instructions-container">
+            <div id="instructions-vt1-plot"></div>
+            <div id="instructions-vt2-plot"></div>
+        </div>
+        <div id="identifying-instructions-text">
+            <div id="identifying-instructions-vt1" class="shadow-box">
+                <h2>Identifying the Aerobic Threshold</h2>
+                <ol>
+                    <li>Use the shape of the Respiratory Exchange Ratio (RER) (VCO<sub>2</sub> / O<sub>2</sub>) curve.</li>
+                    <li>Before the threshold, CO<sub>2</sub> production matches O<sub>2</sub> consumption resulting in a constant ratio.</li>
+                    <li>At the threshold, excess CO<sub>2</sub> is produced in the blood from bicarbonate buffering lactic acid, increasing the ratio.</li>
+                </ol>
+            </div>
+            <div id="identifying-instructions-vt2" class="shadow-box">
+                <h2>Identifying the Anaerobic Threshold</h2>
+                <ol>
+                    <li>Use the shape of the Ventilatory Equivalent for CO<sub>2</sub> (VE/VCO<sub>2</sub>) curve.</li>
+                    <li>Before the threshold, VE/VCO<sub>2</sub> remains constant or decreases.</li>
+                    <li>After the threshold, the body attempts to raise it's blood pH by increasing ventilation, causing VE/VCO<sub>2</sub> to rise.</li>
+                </ol>
+            </div>
+        </div>
+        <div id="identifying-threshold-container">
+            <div id="identifying-threshold-1"></div>
+            <div id="identifying-threshold-2"></div>
+            <div id="id-vt1-tooltip" class="threshold-tooltip" style="display: none;">Select The Aerobic Threshold</div>
+            <div id="id-vt2-tooltip" class="threshold-tooltip" style="display: none;">Select The Anaerobic Threshold</div>
+        </div>
+    </div>
+
     <div id="personal-vis">
         <h1 id="personal-vis-title"> Explore Runners Similar to You</h1>
         <div id="input-row">
@@ -114,7 +146,14 @@
             <input type="text" placeholder="Enter Height (cm) ..." id="height-input" class="user-input" />
             <input type="text" placeholder="Enter Weight (kg) ..." id="weight-input" class="user-input" />  
         </div>
-        <h3 id="personal-vis-explanation">Click the bars to select runners, then try identifying their thresholds...</h3>
+        <div id="personal-vis-instructions">
+            <h2>Instructions</h2>
+            <ol>
+                <li>Select a runner by clicking on their progress bar.</li>
+                <li>Mark their ventilatory thresholds by clicking on the plots below.</li>
+                <li>Try a different runners and compare the results.</li>
+            </ol>
+        </div>
         <div id="personal-vis-content">
             <div id="runners-table"></div>
             <div id="runners-bar-plot"></div>
@@ -127,8 +166,8 @@
             <div id="vt2-tooltip" class="threshold-tooltip" style="display: none;">Select Anaerobic Threshold</div>
         </div>
         <div id="threshold-tips">
-            <div id="vt1-tips" class="threshold-tips-box">
-                <h3 class = "tips-heading">Aerobic Threshold Tips</h3>
+            <div id="vt1-tips" class="draw-attention">
+                <h3 class = "tips-heading"><span style="color: limegreen;">Aerobic</span> Threshold Tips</h3>
                 <ul>
                     <li>Start your search in the first half of the test.</li>
                     <li>Look for the point where RER starts to increase.</li>
@@ -136,8 +175,8 @@
                     
                 </ul>
             </div>
-            <div id ="vt2-tips" class="threshold-tips-box">
-                <h3 class = "tips-heading">Anaerobic Threshold Tips</h3>
+            <div id ="vt2-tips" class="draw-attention">
+                <h3 class = "tips-heading"><span style="color: red;">Anaerobic</span> Threshold Tips</h3>
                 <ul>
                     <li>Start your search in the last third of the test.</li>
                     <li>Look for the point where VE/VCO2 starts to increase after decreasing or remaining constant</li>

@@ -1,4 +1,5 @@
-#personal-vis-title {
+#personal-vis-title,
+#identifying-title {
     text-align: center;
 }
 
@@ -30,10 +31,20 @@
     flex: 0.3;
 }
 
-#personal-vis-explanation {
+#personal-vis-instructions {
     margin-top: 30px;
     margin-bottom: 30px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px 20px 8px 40px;
+    margin-bottom: 16px;
 }
+
+#personal-vis-instructions li {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
 
 #personal-vis-content {
     margin: 0 0;
@@ -78,6 +89,9 @@
 }
 
 #runner-threshold-container,
+#identifying-threshold-container,
+#identifying-instructions-container,
+#identifying-instructions-text,
 #threshold-tips {
     display: flex;
     align-items: center;
@@ -88,14 +102,48 @@
 #personal-vis-content,
 #runner-threshold-1,
 #runner-threshold-2,
+#instructions-vt1-plot,
+#instructions-vt2-plot,
+#identifying-threshold-1,
+#identifying-threshold-2,
 #hook-explanation,
 #hook-terms,
-.threshold-tips-box {
+.threshold-tips-box ,
+.shadow-box {
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 8px;
     margin-bottom: 16px;
 }
+
+.draw-attention {
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 16px;
+}
+
+.draw-attention-hover {
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.05);
+    outline: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+#identifying-instructions-vt1,
+#identifying-instructions-vt2 {
+    width: 50%;
+    height: auto;
+    padding-left: 20px;
+}
+
+#identifying-instructions-vt1 li,
+#identifying-instructions-vt2 li{
+    padding: 8px;
+    font-size: 18px;
+}
+
+
+
 
 #runner-threshold-1 .x-axis text,
 #runner-threshold-1 .y-axis text {
@@ -108,14 +156,18 @@
 }
 
 #runner-threshold-1 .y-grid line,
-#runner-threshold-2 .y-grid line {
+#runner-threshold-2 .y-grid line,
+#identifying-threshold-1 .y-grid line,
+#identifying-threshold-2 .y-grid line {
     stroke: #aaa;
     stroke-opacity: 0.2;
     shape-rendering: crispEdges;
 }
 
 #runner-threshold-1 .y-grid path,
-#runner-threshold-2 .y-grid path {
+#runner-threshold-2 .y-grid path,
+#identifying-threshold-1 .y-grid path,
+#identifying-threshold-2 .y-grid path {
     display: none;
 }
 
