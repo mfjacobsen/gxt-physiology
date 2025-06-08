@@ -1,106 +1,96 @@
-/* css/demographic.css */
-
-/* ─── Container & Controls ─────────────────────────────────────────────────── */
+/* Container & SVG Background */
 #demographic-viz-container {
-  font-family: Arial, sans-serif;
-  background: #fafafa;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  margin: 0 auto;
-  max-width: 840px;
   position: relative;
+  background: #000;
+  padding: 10px;
+}
+#demographic-viz-container svg {
+  background-color: #000;
 }
 
-#control-div {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
+/* Control labels & selects */
 .control-label {
-  font-weight: bold;
-  margin-right: 6px;
+  color: #fff;
+  margin-right: 4px;
   font-size: 14px;
-  color: #333;
 }
-
 .control-select {
-  padding: 4px 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #fff;
-  color: #333;
+  background: #222;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 2px 6px;
+  margin-right: 12px;
 }
 
-/* ─── Chart Titles ─────────────────────────────────────────────────────────── */
-.chart-svg {
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
+/* Chart title */
 .chart-title {
+  fill: #fff;
   font-size: 16px;
-  font-weight: bold;
-  fill: #333;
-  text-anchor: middle;
+  font-weight: 600;
 }
 
-.x-axis-label, .y-axis-label {
-  font-size: 13px;
-  font-weight: bold;
-  fill: #333;
+/* Axis labels */
+.x-axis-label,
+.y-axis-label {
+  fill: #fff;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-/* ─── Axes ─────────────────────────────────────────────────────────────────── */
-.chart-svg .x-axis path,
-.chart-svg .x-axis line,
-.chart-svg .y-axis path,
-.chart-svg .y-axis line {
-  stroke: #ccc;
+/* Axis lines & ticks */
+.x-axis path,
+.x-axis line,
+.y-axis path,
+.y-axis line {
+  stroke: #fff;
 }
-
-.chart-svg .x-axis text,
-.chart-svg .y-axis text {
+.x-axis text,
+.y-axis text {
+  fill: #fff;
   font-size: 12px;
-  fill: #333;
 }
 
-/* ─── Bars ─────────────────────────────────────────────────────────────────── */
-.bar {
-  opacity: 0.9;
-}
-
-.bar:hover {
-  opacity: 1;
-  stroke: #555;
-  stroke-width: 1px;
-}
-
-/* ─── Legend ───────────────────────────────────────────────────────────────── */
-.legend rect {
-  /* border around each colored square */
-  stroke: #333;
-  stroke-width: 1px;
-}
-
-.legend-text {
+/* Legend */
+.legend text {
+  fill: #fff;
   font-size: 12px;
-  fill: #333;
 }
 
-/* ─── Tooltip ──────────────────────────────────────────────────────────────── */
+/* Tooltip */
 .tooltip {
   position: absolute;
-  pointer-events: none;
-  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  background: rgba(30, 30, 30, 0.9);
   color: #fff;
-  border-radius: 4px;
   padding: 6px 8px;
+  border-radius: 4px;
+  pointer-events: none;
   font-size: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   z-index: 1000;
-  display: none; /* toggled in JS */
+}
+
+/* Demographic viz section: full width, centered */
+#demographic-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px 0;
+}
+
+/* Title styling (you may already have this) */
+#demographic-title {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* Make the SVG fill its container (up to a max width) */
+#demographic-viz-container svg {
+  width: 100% !important;
+  max-width: 800px;   /* same as your JS width */
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
 }
