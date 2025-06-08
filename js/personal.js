@@ -1179,6 +1179,7 @@ function renderIdentifying1Plot(runnersTests, id_test = "639_1") {
         .attr("x2", innerWidth);
 
     const tooltip = document.getElementById("id-vt1-tooltip");
+    const tipsBox = document.querySelector('#identifying-instructions-vt1');
 
     g.append("rect")
         .attr("class", "overlay-threshold1")
@@ -1207,12 +1208,14 @@ function renderIdentifying1Plot(runnersTests, id_test = "639_1") {
                 focusVLine.style("display", null);
                 focusHLine.style("display", null);
             }
+            tipsBox.classList.add('draw-attention-hover');
         })
         .on("mouseleave", () => {
             if (!id_vt1Locked) {
                 focusGroup.style("display", "none");
                 tooltip.style.display = "none";
             }
+            tipsBox.classList.remove('draw-attention-hover');
         })
         .on("click", (event) => {
             const [mx] = d3.pointer(event);
@@ -1440,6 +1443,7 @@ function renderIdentifying2Plot(runnersTests, id_test = "639_1") {
         .attr("x2", innerWidth);
 
     const tooltip = document.getElementById("id-vt2-tooltip");
+    const tipsBox = document.querySelector('#identifying-instructions-vt2');
 
     g.append("rect")
         .attr("class", "overlay-threshold1")
@@ -1468,12 +1472,14 @@ function renderIdentifying2Plot(runnersTests, id_test = "639_1") {
                 focusVLine.style("display", null);
                 focusHLine.style("display", null);
             }
+            tipsBox.classList.add('draw-attention-hover');
         })
         .on("mouseleave", () => {
             if (!id_vt2Locked) {
                 focusGroup.style("display", "none");
                 tooltip.style.display = "none";
             }
+            tipsBox.classList.remove('draw-attention-hover');
         })
         .on("click", (event) => {
             const [mx] = d3.pointer(event);
@@ -1660,6 +1666,20 @@ function renderInstructions1Plot() {
         .attr("cy", y(thresholdRatio))
         .attr("r", 5)
         .attr("fill", "limegreen");
+
+    const tipsBox = document.querySelector('#identifying-instructions-vt1');
+
+    g.append("rect")
+        .attr("class", "instructions-overlay")
+        .attr("width", innerWidth)
+        .attr("height", innerHeight)
+        .attr("fill", "transparent")
+        .on("mouseenter", () => {
+            tipsBox.classList.add('draw-attention-hover');
+        })
+        .on("mouseleave", () => {
+            tipsBox.classList.remove('draw-attention-hover');
+        });
 }
 
 function renderInstructions2Plot() {
@@ -1791,6 +1811,20 @@ function renderInstructions2Plot() {
         .attr("text-anchor", "middle")
         .attr("fill", "white")
         .text("VE / VCO₂");
+
+    const tipsBox = document.querySelector('#identifying-instructions-vt2');
+
+    g.append("rect")
+        .attr("class", "instructions-overlay")
+        .attr("width", innerWidth)
+        .attr("height", innerHeight)
+        .attr("fill", "transparent")
+        .on("mouseenter", () => {
+            tipsBox.classList.add('draw-attention-hover');
+        })
+        .on("mouseleave", () => {
+            tipsBox.classList.remove('draw-attention-hover');
+            });
 }
 
 

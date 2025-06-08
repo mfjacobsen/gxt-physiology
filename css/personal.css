@@ -130,20 +130,32 @@
 }
 
 #identifying-instructions-vt1,
-#identifying-instructions-vt2 {
+#identifying-instructions-vt2,
+#vt1-tips,
+#vt2-tips {
     width: 50%;
     height: auto;
     padding-left: 20px;
 }
 
 #identifying-instructions-vt1 li,
-#identifying-instructions-vt2 li{
+#identifying-instructions-vt2 li,
+#vt1-tips li,
+#vt2-tips li,
+#threshold-findings li
+{
     padding: 8px;
     font-size: 18px;
 }
 
+#identifying-container h2 {
+    margin-bottom: 40px;
+    margin-left: 20px;
+}
 
-
+#threshold-findings h2{
+    margin-left: 20px;
+}
 
 #runner-threshold-1 .x-axis text,
 #runner-threshold-1 .y-axis text {

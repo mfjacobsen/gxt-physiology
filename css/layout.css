@@ -15,15 +15,45 @@ main {
     margin: 0 auto;
 }
 
+
+#hook-explanation p {
+    text-align: left;
+    line-height: 1.5em;
+    font-size: 22px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 #hook-terms {
-    padding: 50px;
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+#hook-terms h2 {
+    text-align: center;
+    font-size: 1.6em;
+    margin-bottom: 20px;
 }
 
 #hook-terms ul {
-    text-align: left;
-    margin-left: 50px;
+    list-style-type: none;
     padding-left: 20px;
 }
-#hook-explanation {
-    padding: 30px;
+
+#hook-terms li {
+    margin-bottom: 18px;
+    position: relative;
+    padding-left: 24px;
+}
+
+#hook-terms li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #1e90ff;
+    font-weight: bold;
 }

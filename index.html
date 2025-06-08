@@ -21,23 +21,34 @@
     <br><br><br><br><br><br><br><br><br><br><br><br>
 
     <div class="header">
-        <h1>What Happens In Your Body When You Run Until Exhausted?</h1>
+        <h1>What Happens In Your Body When You  <span style="color: #1e90ff;">Run To Exhaustion</span></h1>
         <br>
-        <h3 id = "hook-explanation">Discover the physiological changes that occur during intense excercise. Our data come from over 900 Graded Exercise Tests.
-            Participants ran on a treadmill that steadily increased in speed until they could no longer continue. A respiratory mask measured
-            their oxygen consumption, carbon dioxide production, total respiratory volume, and other biometrics.
-        </h3>
+        <div  id="hook-explanation">
+            <p>Discover the physiological changes that occur during intense excercise. Our data come from over 900 Graded Exercise
+                Tests. Participants ran on a treadmill that steadily increased in speed until they could no longer continue. A respiratory
+                mask measured their oxygen consumption, carbon dioxide production, total respiratory volume, and other biometrics.
+                <br><br>
+                In this interactive website, you will learn how to identify the <span style="color: #1e90ff;">ventilatory thresholds</span> that occur during exercise, and explore how these thresholds vary between individuals.
+
+            </p>
+        </div>
+        <div id="image-container">
+            <img src="./assets/images/runner1.png" class="runner shadow-box" id="runner-image-1" width="500">
+            <img src="./assets/images/runner2.png" class="runner shadow-box" id="runner-image-2" width="500">
+        </div>
         <br>
         <div id="hook-terms">
             <h2>Terms to Know</h2>
             <ul>
-                <li><strong>VO2:</strong> The amount of oxygen consumed by the body during exercise measured in mL/min.</li>
-                <li><strong>VCO2:</strong> The amount of carbon dioxide produced by the body during exercise measured in mL/min.</li>
-                <li><strong>VE:</strong> Minute Ventilation: The volume of air breathed measured in L/min.</li>
+                <li><strong>VO2 - </strong> The amount of oxygen consumed by the body during exercise measured in mL/min.</li>
+                <li><strong>VCO2 - </strong> The amount of carbon dioxide produced by the body during exercise measured in mL/min.</li>
+                <li><strong>VE - </strong> Minute Ventilation: The volume of air breathed measured in L/min.</li>
                 <br>
-                <li><strong>RER:</strong> Respiratory Exchange Ratio: a measure of the ratio of carbon dioxide produced to oxygen consumed.</li>
-                <li><strong>VE/VCO2:</strong> Ventilatory Equivalent for CO2: a measure of the relationship between amount of air and carbon dioxide production.</li>
-            </ul>
+                <li><strong style="color: limegreen;">VCO₂ / VO₂</strong> - Respiratory Exchange Ratio (RER): The ratio of carbon dioxide
+                    produced to oxygen consumed.</li>
+                <li><strong style="color: red;">VE / VCO₂</strong> - Ventilatory Equivalent for CO₂: The relationship between
+                    amount of air breathed and carbon dioxide produced.</li>
+                </ul>
         </div>
     </div>
 
@@ -137,15 +148,15 @@
         </div>
         <div id="identifying-instructions-text">
             <div id="identifying-instructions-vt1" class="shadow-box">
-                <h2>Identifying the Aerobic Threshold</h2>
+                <h2>Identifying the <span style="color: limegreen;">Aerobic</span> Threshold</h2>
                 <ol>
                     <li>Use the shape of the Respiratory Exchange Ratio (RER) (VCO<sub>2</sub> / O<sub>2</sub>) curve.</li>
                     <li>Before the threshold, CO<sub>2</sub> production matches O<sub>2</sub> consumption resulting in a constant ratio.</li>
-                    <li>At the threshold, excess CO<sub>2</sub> is produced in the blood from bicarbonate buffering lactic acid, increasing the ratio.</li>
+                    <li>After the threshold, excess CO<sub>2</sub> is produced in the blood from bicarbonate buffering lactic acid, increasing the ratio.</li>
                 </ol>
             </div>
             <div id="identifying-instructions-vt2" class="shadow-box">
-                <h2>Identifying the Anaerobic Threshold</h2>
+                <h2 >Identifying the <span style="color: red;">Anaerobic</span> Threshold</h2>
                 <ol>
                     <li>Use the shape of the Ventilatory Equivalent for CO<sub>2</sub> (VE/VCO<sub>2</sub>) curve.</li>
                     <li>Before the threshold, VE/VCO<sub>2</sub> remains constant or decreases.</li>
@@ -153,6 +164,7 @@
                 </ol>
             </div>
         </div>
+        <h2 id="identifying-instructions-title"><span style="color:#1e90ff">Identify</span> the thresholds below by clicking on the plots:</h2>
         <div id="identifying-threshold-container">
             <div id="identifying-threshold-1"></div>
             <div id="identifying-threshold-2"></div>
@@ -178,11 +190,11 @@
             <input type="text" placeholder="Enter Weight (kg) ..." id="weight-input" class="user-input" />  
         </div>
         <div id="personal-vis-instructions">
-            <h2>Instructions</h2>
+            <h2><span style="color:#1e90ff">Instructions</span></h2>
             <ol>
                 <li>Select a runner by clicking on their progress bar.</li>
                 <li>Mark their ventilatory thresholds by clicking on the plots below.</li>
-                <li>Try a different runners and compare the results.</li>
+                <li>Try a few different runners and compare the results.</li>
             </ol>
         </div>
         <div id="personal-vis-content">
@@ -214,6 +226,13 @@
                 </ul>
             </div>
         </div>
+        <div id="threshold-findings" class="shadow-box">
+            <h2>What did you find?</h2>
+            <ul>
+                <li>You probably saw a lot of variation in the threshold times between runners.</li>
+                <li>Even very similar runners can have very different RER and VE/VCO<sub>2</sub> curves.</li>
+                <li>This suggests that even within demographic group and fitness level, there is still significant variation in respiratory physiology in exercise.</li>
+            </ul>
     </div>
 
     <section id="demographic-section">
