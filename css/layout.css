@@ -57,3 +57,31 @@ main {
     color: #1e90ff;
     font-weight: bold;
 }
+
+.transition-section {
+    margin: 120px 0;
+    /* lots of space above & below */
+    padding: 160px 130px;
+    /* roomy inset padding */
+    background-color: #111;
+    /* very dark gray */
+    border-left: 6px solid #1ebafa;
+    /* accent stripe (same as your progress bar) */
+    border-right: 6px solid #1ebafa;
+    /* accent stripe (same as your progress bar) */
+
+    border-radius: 6px;
+    /* slightly rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    color: #f5f5f5;
+    /* light text */
+    text-align: center;
+}
+
+.transition-section p {
+    margin: 0 auto;
+    max-width: 700px;
+    /* keep lines comfortably narrow */
+    font-size: 1.3rem;
+    line-height: 1.6;
+}
