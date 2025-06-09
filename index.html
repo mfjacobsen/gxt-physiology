@@ -89,13 +89,26 @@
 <!-- MAIN CONTAINER -->
 <div class="container">
     <div class="visual">
+  
+      <!-- 🟢 Full-width explanation box -->
+      <div class="why-section">
+        <h2>Why Are We Showing These Two Plots?</h2>
+        <p>These graphs show how your breathing and gas exchange change as you run harder.</p>
+        <p>As exercise intensity increases, your body shifts how it produces and clears energy.</p>
+        <p>In the top graph (<strong>VCO₂ / VO₂</strong>), look for the sharp rise near the green vertical line. This inflection point marks the first ventilatory threshold (VT1), when your body starts relying more on anaerobic metabolism.</p>
+        <p>In the bottom graph (<strong>VE / VCO₂</strong>), look for the sudden increase near the red vertical line. This indicates the second ventilatory threshold (VT2), when your breathing rate sharply increases to remove excess CO₂ as acid builds up too quickly.</p>
+        <p>During the simulation, we’ll pause at each threshold to explain what’s happening inside your body.</p>
+      </div>
+      
+      
+      
+  
       <div class="top-section">
         <div class="runner-row">
-        
+  
           <!-- LEFT COLUMN -->
           <div class="left-column">
-
-        
+  
             <!-- Image + Info -->
             <div style="display: flex; align-items: flex-start; gap: 20px;">
               <div class="runner-img-wrapper">
@@ -134,17 +147,6 @@
               <div id="threshold-text"></div>
               <button id="continue-btn">Continue</button>
             </div>
-  
-            <!-- Plot Explanation Box -->
-            <div class="threshold-intro info-box" style="width: 950px;">
-                <h2>Why Are We Showing These Two Plots?</h2>
-                <p>These graphs show how your breathing and gas exchange change as you run harder.</p>
-                <p>As exercise intensity increases, your body shifts how it produces and clears energy.</p>
-                <p>A spike in <strong>VCO₂ / VO₂</strong> means your body is starting to rely more on anaerobic metabolism. This is known as the first ventilatory threshold (VT1).</p>
-                <p>A spike in <strong>VE / VCO₂</strong> means your breathing rate sharply increases to remove excess CO₂. This marks the second ventilatory threshold (VT2), when acid builds up too fast to buffer.</p>
-                <p>During the simulation, we’ll pause at each threshold to explain what’s happening inside your body.</p>
-              </div>
-              
           </div>
   
           <!-- RIGHT COLUMN: GRAPHS -->
@@ -161,8 +163,10 @@
   
         </div>
       </div>
+  
     </div>
   </div>
+  
 
   <section class="transition-section">
     <p>

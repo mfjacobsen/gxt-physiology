@@ -135,29 +135,61 @@ body {
 }
 
 .threshold-intro {
-  max-width: 600px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  padding: 16px;
+  width: 100%;
+  padding: 20px 24px;
   background: #1a1a1a;
-  border-left: 4px solid #4CAF50;
+  border-left: 5px solid #4CAF50;
   border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 19px;
+  line-height: 0.4;
+  margin: 20px 0;
 }
 
-.threshold-intro h2 {
+.why-section {
+  width: 100%;
+  background: #1a1a1a;
+  padding: 24px 28px;
+  border-left: 5px solid #4CAF50;
+  border-radius: 8px;
+  font-size: 20px;     
+  line-height: 0.1;  
+  margin-bottom: 24px;
+}
+
+.why-section h2 {
   color: #4CAF50;
-  font-size: 18px;
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+
+
+.why-section h3 {
+  color: #7fff7f;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
-/* ✅ Graph container and box alignment fix */
+.why-section p {
+  font-size: 16px;
+  line-height: 1.1;
+  color: #ddd;
+}
+
+/* ⬅️ Runner info on left */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 600px;
+}
+
+/* ➡️ Graphs on right */
 .graph-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 560px;            /* lock column width */
+  width: 600px;
 }
 
 .threshold-graph-box {
@@ -165,7 +197,7 @@ body {
   padding: 10px;
   color: white;
   border-radius: 8px;
-  width: 100%;             /* match .graph-column */
+  width: 100%;
   margin: 0;
 }
 
@@ -175,33 +207,24 @@ body {
   margin-bottom: 10px;
   color: white;
 }
-.left-column {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-  width: 600px; /* 🔒 lock width to match explanation and chart */
-}
-
-.graph-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 560px; /* 🔒 match graph width */
-}
-
-.threshold-graph-box {
-  background: black;
-  padding: 10px;
-  color: white;
-  border-radius: 8px;
-  width: 100%;
-  margin: 0;
-}
 
 .threshold-graph-box svg {
-  max-width: 540px;  /* set this to your desired shrink size */
   width: 100%;
-  height: auto;
+  max-width: 580px;
+  height: 260px !important;
   display: block;
+}
+
+.graph-wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+.why-section {
+  width: 100%;
+  background: #1a1a1a;
+  padding: 20px 24px;
+  border-radius: 8px;
+  border-left: 5px solid #4CAF50;
+  margin-bottom: 20px;
 }
