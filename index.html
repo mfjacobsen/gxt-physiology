@@ -502,7 +502,7 @@
         </div>
 
         <div class="story-section">
-          <h3>Conclusion</h3>
+          <h3>Summary</h3>
           <div class="subsection">
             <p>
               Throughout our journey you’ve seen how <strong>age</strong>, <strong>BMI</strong>, and <strong>sex</strong>
@@ -524,6 +524,47 @@
       <div id="demographic-viz-container"></div>
     </div>
   </section>
+
+  <!-- Add this CSS to your main stylesheet (e.g. layout.css) -->
+<style>
+  .conclusion-section {   
+    margin: 120px 0;                     /* space above & below */
+    padding: 60px 30px;                  /* roomy inset padding */
+    background-color: #111;              /* dark background to match theme */
+    border-left: 6px solid #1ebafa;      /* accent stripe */
+    border-right: 6px solid #1ebafa;      /* accent stripe */
+
+    border-radius: 6px;                  /* rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    color: #f5f5f5;                      /* light text */
+  }
+
+  .conclusion-section h2 {
+    margin-top: 0;
+    font-size: 2rem;
+    color: #1ebafa;                      /* match accent color */
+    text-align: center;
+  }
+
+  .conclusion-section p {
+    max-width: 800px;
+    margin: 1.5em auto;
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+</style>
+
+<!-- Then insert this where you want your conclusion -->
+<section class="conclusion-section">
+  <h2>Conclusion</h2>
+  <p>
+    On this site, we want you to understand that treadmill running, and fitness training more broadly, is highly individualized. There’s no one-size-fits-all approach. From the very start, we saw that ventilation thresholds vary significantly from person to person, and you learned how to spot those thresholds on physiological graphs.
+  </p>
+  <p>
+    Our demographic visuals showed that while factors like BMI, age, and sex do exert some influence on threshold times, their impact is relatively small. Training itself is the key driver of performance and of delaying the point at which you hit your ventilation threshold. By combining personalized, per-runner plots with aggregated, demographic views, we hope you’ll take away this core message: effort and tailored training matter far more than innate traits.
+  </p>
+</section>
+
 
 
 
